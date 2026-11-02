@@ -1,0 +1,151 @@
+- name: MaximumSequenceProbability
+- name: BoostedProbSequence
+- name: Perplexity
+- name: MeanTokenEntropy
+- name: MeanPointwiseMutualInformation
+- name: SelfCertainty
+- name: MeanConditionalPointwiseMutualInformation 
+- name: ClaimConditionedProbability
+- name: PTrue
+- name: PTrueSampling
+- name: MonteCarloSequenceEntropy
+- name: MonteCarloNormalizedSequenceEntropy
+- name: LexicalSimilarity
+  cfg:
+    metric: "rouge1"
+- name: LexicalSimilarity
+  cfg:
+    metric: "rouge2"
+- name: LexicalSimilarity
+  cfg:
+    metric: "rougeL"
+- name: LexicalSimilarity
+  cfg:
+    metric: "BLEU"
+- name: NumSemSets
+- name: EigValLaplacian
+  cfg:
+    similarity_score: "NLI_score"
+    affinity: "entail"
+- name: EigValLaplacian
+  cfg:
+    similarity_score: "NLI_score"
+    affinity: "contra"
+- name: EigValLaplacian
+  cfg:
+    similarity_score: "Jaccard_score"
+- name: DegMat
+  cfg:
+    similarity_score: "NLI_score"
+    affinity: "entail"
+- name: DegMat
+  cfg:
+    similarity_score: "NLI_score"
+    affinity: "contra"
+- name: DegMat
+  cfg:
+    similarity_score: "Jaccard_score"
+- name: Eccentricity
+  cfg:
+    similarity_score: "NLI_score"
+    affinity: "entail"
+- name: Eccentricity
+  cfg:
+    similarity_score: "NLI_score"
+    affinity: "contra"
+- name: Eccentricity
+  cfg:
+    similarity_score: "Jaccard_score"
+- name: SemanticEntropy
+- name: SAR
+- name: TokenSAR
+- name: SentenceSAR
+- name: LUQ
+- name: KernelLanguageEntropy
+- name: EigenScore
+- name: RenyiNeg
+- name: FisherRao
+- name: Focus
+  cfg:
+    model_name: '${model.path}'
+    path: "${cache_path}/focus/${model.path}/token_idf.pkl"
+    gamma: 0.9
+    p: 0.01
+    idf_dataset: "LM-Polygraph/RedPajama-Data-100-Sample-For-Test"
+    trust_remote_code: True
+    idf_seed: 42
+    idf_dataset_size: -1
+    spacy_path: "en_core_web_sm"
+- name: AttentionScore
+  cfg:
+    gen_only: False
+- name: RAUQ
+  cfg:
+    alpha: 0.2
+    use_entropy: False
+- name: RAUQ
+  cfg:
+    alpha: 0.8
+    use_entropy: True
+- name: CSL
+- name: CocoaMSP
+- name: CocoaPPL
+- name: CocoaMTE
+- name: SemanticDensity
+- name: methods.monte_carlo_sequence_entropy_mc_masked_nll
+- name: methods.monte_carlo_normalized_sequence_entropy_mc_masked_nll
+- name: methods.sentence_sar_mc_masked_nli
+- name: methods.semantic_entropy_mc_masked_nll
+- name: methods.semantic_density_mc_masked_nll
+- name: methods.lexical_similarity_trace
+  cfg:
+    metric: rouge1 
+- name: methods.lexical_similarity_trace
+  cfg:
+    metric: rouge2 
+- name: methods.lexical_similarity_trace
+  cfg:
+    metric: rougeL 
+- name: methods.lexical_similarity_trace
+  cfg:
+    metric: BLEU 
+- name: methods.deg_mat_trace
+  cfg:
+    similarity_score: "NLI_score"
+    affinity: "entail"
+- name: methods.deg_mat_trace
+  cfg:
+    similarity_score: "NLI_score"
+    affinity: "contra"
+- name: methods.deg_mat_trace
+  cfg:
+    similarity_score: "Jaccard_score"
+- name: methods.eccentricity_trace
+  cfg:
+    similarity_score: "NLI_score"
+    affinity: "entail"
+- name: methods.eccentricity_trace
+  cfg:
+    similarity_score: "NLI_score"
+    affinity: "contra"
+- name: methods.eccentricity_trace
+  cfg:
+    similarity_score: "Jaccard_score"
+- name: methods.eig_val_laplacian_trace
+  cfg:
+    similarity_score: "NLI_score"
+    affinity: "entail"
+- name: methods.eig_val_laplacian_trace
+  cfg:
+    similarity_score: "NLI_score"
+    affinity: "contra"
+- name: methods.eig_val_laplacian_trace
+  cfg:
+    similarity_score: "Jaccard_score"
+- name: methods.mc_masked_nll
+- name: methods.mc_masked_normalized_nll
+- name: methods.cocoa_mc_masked_nll
+- name: methods.cocoa_mc_masked_normalized_nll
+- name: methods.num_sem_sets_trace
+- name: methods.luq_trace
+- name: methods.kernel_language_entropy_trace

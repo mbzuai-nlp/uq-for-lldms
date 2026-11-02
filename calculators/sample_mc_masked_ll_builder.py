@@ -1,0 +1,29 @@
+from typing import Any
+
+from lm_polygraph.utils.builder_enviroment_stat_calculator import (
+    BuilderEnvironmentBase,
+)
+from .sample_mc_masked_ll_calculator import SampleMCMaskedLLCalculator
+
+
+def _get_cfg_value(cfg: Any, key: str, default: Any) -> Any:
+    """
+    Safely get a value from an OmegaConf node or a plain dict.
+    """
+    if cfg is None:
+        return default
+    # OmegaConf nodes support attribute-style access; dicts support get()
+    if isinstance(cfg, dict):
+        return cfg.get(key, default)
+    return getattr(cfg, key, default)
+
+
+def load_stat_calculator(cfg, env: BuilderEnvironmentBase):
+    """
+    Builder entrypoint compatible with `FactoryStatCalculator`.
+
+    This does not touch `lm_polygraph` internals; it simply constructs
+    our custom `SampleMCMaskedLLCalculator` using the provided config.
+    """
+    mc_num = _get_cfg_value(cfg, "mc_num", 16)
+    return SampleMCMaskedLLCalculator(mc_num=mc_num)

@@ -1,0 +1,286 @@
+- auto
+- name: EmbeddingsCalculator
+  builder: lm_polygraph.defaults.stat_calculator_builders.default_Embeddings
+  cfg:
+    embeddings_level: "sequence"
+  stats:
+    - "embeddings"
+  dependencies:
+    - "embeddings_raw"
+- name: TokenEmbeddingsCalculator
+  builder: lm_polygraph.defaults.stat_calculator_builders.default_Embeddings
+  cfg:
+    embeddings_level: "token"
+  stats:
+    - "token_embeddings"
+  dependencies:
+    - "embeddings_raw"
+- name: LookbackRatioCalculator
+  builder: calculators.safe_lookback_ratio_builder
+  cfg:
+    eps: 1.0e-6
+  stats:
+    - "lookback_ratios"
+  dependencies:
+    - "attention_raw"
+- name: AttentionFeaturesCalculator
+  builder: lm_polygraph.defaults.stat_calculator_builders.default_Attentions
+  cfg:
+    attentions: "attention_features"
+  stats:
+    - "attention_features"
+  dependencies:
+    - "attention_raw"
+- name: MCMaskedLLCalculator
+  builder: calculators.mc_masked_ll_builder
+  cfg:
+    mc_num: 16
+  stats:
+    - "mc_masked_ll"
+    - "mc_masked_normalized_ll"
+  dependencies:
+    - "greedy_texts"
+- name: SampleMCMaskedLLCalculator
+  builder: calculators.sample_mc_masked_ll_builder
+  cfg:
+    mc_num: 16
+  stats:
+    - "sample_mc_masked_ll"
+    - "sample_mc_masked_normalized_ll"
+  dependencies:
+    - "sample_texts"
+- name: BlockMCMaskedLLCalculator
+  builder: calculators.block_mc_masked_ll_builder
+  cfg:
+    block_size: 32
+    mc_num: 16
+    seed: 42
+  stats:
+    - "block_mc_masked_ll"
+    - "block_mc_masked_normalized_ll"
+  dependencies:
+    - "greedy_texts"
+- name: DiffusionGreedyProbsCalculator
+  builder: calculators.diffusion_greedy_probs_builder
+  cfg:
+    output_diffusion_stats: True
+    output_hidden_states_trace: False
+    output_all_hidden_states_trace: False
+    output_token_embeddings: True
+    hidden_state_layer: "middle"
+  stats:
+    - "input_texts"
+    - "input_tokens"
+    - "input_embeddings_mean"
+    - "greedy_log_probs"
+    - "greedy_tokens"
+    - "greedy_tokens_alternatives"
+    - "greedy_texts"
+    - "greedy_log_likelihoods"
+    - "embeddings_raw"
+    - "attention_raw"
+    - "tokenizer"
+    - "nfe"
+    - "remask_count"
+    - "first_remask_step"
+    - "generation_trace"
+    - "full_generation_trace"
+    - "last_block_generation_trace"
+    - "block_generation_traces"
+    - "gen_trace_logits"
+    - "gen_trace_entropy"
+    - "gen_trace_argmax"
+    - "gen_trace_top2gap"
+    - "gen_trace_embeddings"
+    - "confidence_at_commit"
+    - "mask_fraction_at_commit"
+    - "hidden_states_trace"
+    - "hidden_states_trace_mask"
+    - "hidden_states_trace_block_length"
+  dependencies: []
+- name: PromptCalculator
+  builder: lm_polygraph.utils.builder_stat_calculator_simple
+  cfg:
+    obj: PromptCalculator
+  stats:
+    - "p_true"
+  dependencies:
+    - "greedy_texts"
+- name: SemanticMatrixTraceCalculator
+  builder: calculators.semantic_matrix_trace_builder
+  cfg:
+    nli_model:
+      deberta_path: "microsoft/deberta-large-mnli"
+      hf_cache: null
+      batch_size: 10
+      device: cuda
+  stats:
+    - "semantic_matrix_entail_trace"
+    - "semantic_matrix_contra_trace"
+    - "semantic_matrix_classes_trace"
+    - "semantic_matrix_entail_logits_trace"
+    - "semantic_matrix_contra_logits_trace"
+    - "entailment_id"
+  dependencies:
+    - "generation_trace"
+- name: GreedyCrossEncoderSimilarityMatrixTraceCalculator
+  builder: calculators.greedy_cross_encoder_similarity_trace_builder
+  cfg:
+  stats:
+    - "greedy_sentence_similarity_forward_trace"
+    - "greedy_sentence_similarity_backward_trace"
+    - "greedy_sentence_similarity_trace"
+  dependencies:
+    - "input_texts"
+    - "generation_trace"
+    - "greedy_texts"
+- name: GreedyCrossEncoderSimilarityMatrixFullTraceCalculator
+  builder: calculators.greedy_cross_encoder_similarity_full_trace_builder
+  cfg:
+  stats:
+    - "greedy_sentence_similarity_forward_full_trace"
+    - "greedy_sentence_similarity_backward_full_trace"
+    - "greedy_sentence_similarity_full_trace"
+  dependencies:
+    - "input_texts"
+    - "full_generation_trace" # changed from "generation_trace"
+    - "greedy_texts"
+- name: GreedyCrossEncoderSimilarityMatrixLastBlockTraceCalculator
+  builder: calculators.greedy_cross_encoder_similarity_last_block_trace_builder
+  cfg:
+  stats:
+    - "greedy_sentence_similarity_last_block_forward_trace"
+    - "greedy_sentence_similarity_last_block_backward_trace"
+    - "greedy_sentence_similarity_last_block_trace"
+  dependencies:
+    - "last_block_generation_trace"
+- name: DiffusionTrainingStatisticExtractionCalculator
+  builder: calculators.diffusion_training_stats_builder
+  cfg:
+    dataset: '${dataset}'
+    text_column: '${text_column}'
+    label_column: '${label_column}'
+    description: ''
+    prompt: ''
+    few_shot_split: "train"
+    train_split: '${train_split}'
+    load_from_disk: '${load_from_disk}'
+    subsample_train_dataset: -1
+    n_shot: 5
+    background_train_dataset: allenai/c4
+    background_train_dataset_text_column: text
+    background_train_dataset_label_column: url
+    background_train_dataset_data_files: en/c4-train.00000-of-01024.json.gz
+    background_load_from_disk: false
+    subsample_background_train_dataset: 1000
+    batch_size: '${batch_size}'
+    seed: '${seed}'
+    size: null
+    bg_size: 100000
+    output_attentions: True
+    output_hidden_states: True
+    output_diffusion_stats: True
+    output_token_embeddings: True
+    hidden_state_layer: "middle"
+    return_attention_features: True
+    target_metric: "Accuracy"
+  stats:
+    - "train_greedy_texts"
+    - "train_input_tokens"
+    - "train_embeddings"
+    - "train_token_embeddings"
+    - "background_train_embeddings"
+    - "background_train_token_embeddings"
+    - "train_input_embeddings_mean"
+    - "train_greedy_tokens"
+    - "train_greedy_log_likelihoods"
+    - "train_gen_trace_entropy"
+    - "train_gen_trace_argmax"
+    - "train_gen_trace_embeddings"
+    - "train_lookback_ratios"
+    - "train_attention_features"
+    - "train_metrics"
+  dependencies: []
+- name: GreedyCrossEncoderSimilarityMatrixBlockTraceCalculator
+  builder: calculators.greedy_cross_encoder_similarity_block_trace_builder
+  cfg:
+  stats:
+    - "greedy_sentence_similarity_block_forward"
+    - "greedy_sentence_similarity_block_backward"
+    - "greedy_sentence_similarity_block"
+  dependencies:
+    - "block_generation_traces"
+- name: GreedyDebertaSimilarityMatrixFullTraceCalculator
+  builder: calculators.greedy_deberta_similarity_full_trace_builder
+  cfg:
+    nli_model:
+      deberta_path: "microsoft/deberta-large-mnli"
+      hf_cache: null
+      batch_size: 10
+      device: cuda
+  stats:
+    - "greedy_deberta_entail_forward_full_trace"
+    - "greedy_deberta_entail_backward_full_trace"
+    - "greedy_deberta_entail_full_trace"
+    - "greedy_deberta_contra_forward_full_trace"
+    - "greedy_deberta_contra_backward_full_trace"
+    - "greedy_deberta_contra_full_trace"
+    - "greedy_deberta_classes_forward_full_trace"
+    - "greedy_deberta_classes_backward_full_trace"
+    - "greedy_deberta_classes_full_trace"
+  dependencies:
+    - "input_texts"
+    - "full_generation_trace"
+    - "greedy_texts"
+- name: GreedyDebertaSimilarityMatrixTraceCalculator
+  builder: calculators.greedy_deberta_similarity_trace_builder
+  cfg:
+    nli_model:
+      deberta_path: "microsoft/deberta-large-mnli"
+      hf_cache: null
+      batch_size: 10
+      device: cuda
+  stats:
+    - "greedy_deberta_entail_forward_trace"
+    - "greedy_deberta_entail_backward_trace"
+    - "greedy_deberta_entail_trace"
+    - "greedy_deberta_contra_forward_trace"
+    - "greedy_deberta_contra_backward_trace"
+    - "greedy_deberta_contra_trace"
+  dependencies:
+    - "generation_trace"
+    - "greedy_texts"
+- name: GreedyDebertaSimilarityMatrixBlockTraceCalculator
+  builder: calculators.greedy_deberta_similarity_block_trace_builder
+  cfg:
+    nli_model:
+      deberta_path: "microsoft/deberta-large-mnli"
+      hf_cache: null
+      batch_size: 10
+      device: cuda
+  stats:
+    - "greedy_deberta_entail_block_forward"
+    - "greedy_deberta_entail_block_backward"
+    - "greedy_deberta_entail_block"
+    - "greedy_deberta_contra_block_forward"
+    - "greedy_deberta_contra_block_backward"
+    - "greedy_deberta_contra_block"
+  dependencies:
+    - "block_generation_traces"
+- name: GreedyDebertaSimilarityMatrixLastBlockTraceCalculator
+  builder: calculators.greedy_deberta_similarity_last_block_trace_builder
+  cfg:
+    nli_model:
+      deberta_path: "microsoft/deberta-large-mnli"
+      hf_cache: null
+      batch_size: 10
+      device: cuda
+  stats:
+    - "greedy_deberta_entail_last_block_forward_trace"
+    - "greedy_deberta_entail_last_block_backward_trace"
+    - "greedy_deberta_entail_last_block_trace"
+    - "greedy_deberta_contra_last_block_forward_trace"
+    - "greedy_deberta_contra_last_block_backward_trace"
+    - "greedy_deberta_contra_last_block_trace"
+  dependencies:
+    - "last_block_generation_trace"

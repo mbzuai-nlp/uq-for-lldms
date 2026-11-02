@@ -1,0 +1,99 @@
+- name: methods.ad_cosine_similarity
+  cfg:
+    layer: 0
+- name: methods.ad_cosine_similarity
+  cfg:
+    layer: 1
+- name: methods.ad_cosine_similarity
+  cfg:
+    layer: 2
+- name: methods.ad_cosine_similarity
+  cfg:
+    layer: 3
+- name: methods.ad_cosine_similarity
+  cfg:
+    layer: 4
+- name: methods.ad_cosine_similarity
+  cfg:
+    layer: 5
+- name: methods.ad_cosine_similarity
+  cfg:
+    layer: 6
+- name: methods.ad_cosine_similarity
+  cfg:
+    layer: 7
+- name: methods.ad_cosine_similarity
+  cfg:
+    layer: 8
+- name: methods.ad_cosine_similarity
+  cfg:
+    layer: 9
+- name: methods.ad_cosine_similarity
+  cfg:
+    layer: 10
+- name: methods.ad_cosine_similarity
+  cfg:
+    layer: 11
+- name: methods.ad_cosine_similarity
+  cfg:
+    layer: 12
+- name: methods.ad_cosine_similarity
+  cfg:
+    layer: 13
+- name: methods.ad_cosine_similarity
+  cfg:
+    layer: 14
+- name: methods.ad_cosine_similarity
+  cfg:
+    layer: 15
+- name: methods.ad_cosine_similarity
+  cfg:
+    layer: 16
+- name: methods.ad_cosine_similarity
+  cfg:
+    layer: 17
+- name: methods.ad_cosine_similarity
+  cfg:
+    layer: 18
+- name: methods.ad_cosine_similarity
+  cfg:
+    layer: 19
+- name: methods.ad_cosine_similarity
+  cfg:
+    layer: 20
+- name: methods.ad_cosine_similarity
+  cfg:
+    layer: 21
+- name: methods.ad_cosine_similarity
+  cfg:
+    layer: 22
+- name: methods.ad_cosine_similarity
+  cfg:
+    layer: 23
+- name: methods.ad_cosine_similarity
+  cfg:
+    layer: 24
+- name: methods.ad_cosine_similarity
+  cfg:
+    layer: 25
+- name: methods.ad_cosine_similarity
+  cfg:
+    layer: 26
+- name: methods.ad_cosine_similarity
+  cfg:
+    layer: 27
+- name: methods.ad_cosine_similarity
+  cfg:
+    layer: 28
+- name: methods.ad_cosine_similarity
+  cfg:
+    layer: 29
+- name: methods.ad_cosine_similarity
+  cfg:
+    layer: 30
+- name: methods.ad_cosine_similarity
+  cfg:
+    layer: 31
+- name: methods.ad_cosine_similarity
+  cfg:
+    layer: 32

@@ -1,0 +1,57 @@
+- name: MaximumSequenceProbability
+- name: SAR
+- name: TokenSAR
+- name: SentenceSAR
+- name: SemanticDensity
+- name: methods.sentence_sar_mc_masked_nli
+- name: methods.semantic_density_mc_masked_nll
+- name: methods.lexical_similarity_trace
+  cfg:
+    metric: rouge1 
+- name: methods.lexical_similarity_trace
+  cfg:
+    metric: rouge2 
+- name: methods.lexical_similarity_trace
+  cfg:
+    metric: rougeL 
+- name: methods.lexical_similarity_trace
+  cfg:
+    metric: BLEU 
+- name: methods.deg_mat_trace
+  cfg:
+    similarity_score: "NLI_score"
+    affinity: "entail"
+- name: methods.deg_mat_trace
+  cfg:
+    similarity_score: "NLI_score"
+    affinity: "contra"
+- name: methods.deg_mat_trace
+  cfg:
+    similarity_score: "Jaccard_score"
+- name: methods.eccentricity_trace
+  cfg:
+    similarity_score: "NLI_score"
+    affinity: "entail"
+- name: methods.eccentricity_trace
+  cfg:
+    similarity_score: "NLI_score"
+    affinity: "contra"
+- name: methods.eccentricity_trace
+  cfg:
+    similarity_score: "Jaccard_score"
+- name: methods.eig_val_laplacian_trace
+  cfg:
+    similarity_score: "NLI_score"
+    affinity: "entail"
+- name: methods.eig_val_laplacian_trace
+  cfg:
+    similarity_score: "NLI_score"
+    affinity: "contra"
+- name: methods.eig_val_laplacian_trace
+  cfg:
+    similarity_score: "Jaccard_score"
+- name: methods.mc_masked_nll
+- name: methods.mc_masked_normalized_nll
+- name: methods.num_sem_sets_trace
+- name: methods.luq_trace
+- name: methods.kernel_language_entropy_trace

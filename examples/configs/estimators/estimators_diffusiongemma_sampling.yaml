@@ -1,0 +1,18 @@
+# Sampling-based estimators for DiffusionGemma, on top of the trace-based set.
+# These need K independent decodes per input (sample_texts / sample_log_probs from
+# DiffusionGemmaSamplingGenerationCalculator), so use them with
+# stat_calculators=calculators_diffusiongemma_sampling.
+#
+# Cost scales with samples_n: each sample is a full diffusion generation.
+- name: SemanticEntropy
+  module: lm_polygraph.estimators
+  class: SemanticEntropy
+  cfg: {}
+- name: KernelLanguageEntropy
+  module: lm_polygraph.estimators
+  class: KernelLanguageEntropy
+  cfg: {}
+- name: CocoaMSP
+  module: lm_polygraph.estimators
+  class: CocoaMSP
+  cfg: {}

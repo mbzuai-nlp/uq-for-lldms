@@ -1,0 +1,26 @@
+- name: MaximumSequenceProbability
+- name: methods.mc_masked_nll
+- name: methods.mc_masked_normalized_nll
+- name: methods.monte_carlo_sequence_entropy_mc_masked_nll
+- name: methods.monte_carlo_normalized_sequence_entropy_mc_masked_nll
+- name: methods.sentence_sar_mc_masked_nli
+- name: methods.semantic_entropy_mc_masked_nll
+- name: methods.semantic_density_mc_masked_nll
+- name: methods.cocoa_mc_masked_nll
+- name: methods.cocoa_mc_masked_normalized_nll
+- name: methods.nfe_uncertainty
+- name: methods.remask_count
+  cfg:
+    aggregation: mean
+- name: methods.remask_count
+  cfg:
+    aggregation: max
+- name: methods.remask_count
+  cfg:
+    aggregation: sum
+- name: methods.first_remask_step_count
+  cfg:
+    aggregation: count
+- name: methods.first_remask_step_count
+  cfg:
+    aggregation: mean_step 

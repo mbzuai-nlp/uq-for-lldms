@@ -1,0 +1,12 @@
+defaults:
+  - default
+
+path: ML-GSAI/ReFusion
+type: DiffusionLLM
+path_to_load_script: ../../refusion/load_refusion.py
+mask_id: 151670
+use_cache: true
+
+load_model_args:
+  device_map: auto
+load_tokenizer_args: {}

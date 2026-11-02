@@ -1,0 +1,33 @@
+- auto
+- name: EmbeddingsCalculator
+  builder: lm_polygraph.defaults.stat_calculator_builders.default_Embeddings
+  cfg:
+    embeddings_level: "sequence"
+  stats:
+    - "embeddings"
+  dependencies:
+    - "embeddings_raw"
+- name: TokenEmbeddingsCalculator
+  builder: lm_polygraph.defaults.stat_calculator_builders.default_Embeddings
+  cfg:
+    embeddings_level: "token"
+  stats:
+    - "token_embeddings"
+  dependencies:
+    - "embeddings_raw"
+- name: LookbackRatioCalculator
+  builder: lm_polygraph.defaults.stat_calculator_builders.default_Attentions
+  cfg:
+    attentions: "lookback_ratio"
+  stats:
+    - "lookback_ratios"
+  dependencies:
+    - "attention_raw"
+- name: AttentionFeaturesCalculator
+  builder: lm_polygraph.defaults.stat_calculator_builders.default_Attentions
+  cfg:
+    attentions: "attention_features"
+  stats:
+    - "attention_features"
+  dependencies:
+    - "attention_raw"

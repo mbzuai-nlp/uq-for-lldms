@@ -1,0 +1,72 @@
+- name: AttentionFeaturesCalculator
+  builder: lm_polygraph.defaults.stat_calculator_builders.default_Attentions
+  cfg:
+    attentions: "attention_features"
+  stats:
+    - "attention_features"
+  dependencies:
+    - "attention_raw"
+- name: DiffusionGreedyProbsCalculator
+  builder: calculators.diffusion_greedy_probs_builder
+  cfg:
+    output_attentions: True
+    output_hidden_states: True
+    output_diffusion_stats: True
+    output_token_embeddings: True
+    hidden_state_layer: "middle"
+  stats:
+    - "input_texts"
+    - "input_tokens"
+    - "input_embeddings_mean"
+    - "greedy_tokens"
+    - "greedy_texts"
+    - "greedy_log_likelihoods"
+    - "attention_raw"
+    - "tokenizer"
+    - "gen_trace_entropy"
+    - "gen_trace_argmax"
+    - "gen_trace_embeddings"
+  dependencies: []
+- name: PromptCalculator
+  builder: lm_polygraph.utils.builder_stat_calculator_simple
+  cfg:
+    obj: PromptCalculator
+  stats:
+    - "p_true"
+  dependencies:
+    - "greedy_texts"
+- name: DiffusionTrainingStatisticExtractionCalculator
+  builder: calculators.diffusion_training_stats_builder
+  cfg:
+    dataset: '${dataset}'
+    text_column: '${text_column}'
+    label_column: '${label_column}'
+    description: ''
+    prompt: ''
+    few_shot_split: "train"
+    train_split: '${train_split}'
+    load_from_disk: '${load_from_disk}'
+    subsample_train_dataset: -1
+    n_shot: 5
+    batch_size: '${batch_size}'
+    seed: '${seed}'
+    size: null
+    output_attentions: True
+    output_hidden_states: True
+    output_diffusion_stats: True
+    output_token_embeddings: True
+    hidden_state_layer: "middle"
+    return_attention_features: True
+    target_metric: "Accuracy"
+  stats:
+    - "train_greedy_texts"
+    - "train_input_tokens"
+    - "train_input_embeddings_mean"
+    - "train_greedy_tokens"
+    - "train_greedy_log_likelihoods"
+    - "train_gen_trace_entropy"
+    - "train_gen_trace_argmax"
+    - "train_gen_trace_embeddings"
+    - "train_attention_features"
+    - "train_metrics"
+  dependencies: []

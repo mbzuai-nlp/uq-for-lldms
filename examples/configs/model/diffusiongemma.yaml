@@ -1,0 +1,17 @@
+defaults:
+  - default
+
+path: google/diffusiongemma-26B-A4B-it
+type: DiffusionGemma
+path_to_load_script: llada/load_diffusiongemma.py
+device: cuda
+
+load_model_args:
+  device_map: auto
+load_tokenizer_args: {}
+
+# DiffusionGemma generation_config.json: eos_token_id=[1,106,50], pad=0 (re-read at
+# runtime; these are fallbacks). length/block_length drive the trace packing defaults.
+eos_ids: [1, 106, 50]
+length: 128
+block_length: 32

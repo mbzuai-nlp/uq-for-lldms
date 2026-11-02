@@ -1,0 +1,11 @@
+- name: KernelLanguageEntropy
+- name: methods.cocoa_mc_masked_nll
+- name: methods.confidence_at_commitment
+  cfg:
+    aggregation: avg
+- name: methods.cocoa_mc_masked_nll_trace
+  cfg:
+    inf_method: ConfidenceAtCommit
+    similarity_metric: cross_encoder
+    block_only: true
+    block_agg: avg

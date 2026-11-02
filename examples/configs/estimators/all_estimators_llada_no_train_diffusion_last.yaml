@@ -1,0 +1,199 @@
+- name: MaximumSequenceProbability
+- name: methods.confidence_at_commitment
+  cfg:
+    aggregation: avg
+- name: methods.confidence_at_commitment
+  cfg:
+    aggregation: min
+- name: methods.cocoa_mc_masked_nll_trace
+  cfg:
+    inf_method: ConfidenceAtCommit
+    similarity_metric: cross_encoder
+- name: methods.cocoa_mc_masked_nll_trace
+  cfg:
+    inf_method: ConfidenceAtCommit
+    similarity_metric: cross_encoder
+    multiply_by_nfe: true
+- name: methods.cocoa_mc_masked_nll_trace
+  cfg:
+    inf_method: ConfidenceAtCommit
+    similarity_metric: cross_encoder
+    progress_score: true
+- name: methods.cocoa_mc_masked_nll_trace
+  cfg:
+    inf_method: ConfidenceAtCommit
+    similarity_metric: cross_encoder
+    progress_score: true
+    multiply_by_nfe: true
+- name: methods.cocoa_mc_masked_nll_trace
+  cfg:
+    inf_method: ConfidenceAtCommit
+    similarity_metric: cross_encoder
+    full_trace: true
+- name: methods.cocoa_mc_masked_nll_trace
+  cfg:
+    inf_method: ConfidenceAtCommit
+    similarity_metric: cross_encoder
+    full_trace: true
+    multiply_by_nfe: true
+- name: methods.cocoa_mc_masked_nll_trace
+  cfg:
+    inf_method: ConfidenceAtCommit
+    similarity_metric: cross_encoder
+    full_trace: true
+    progress_score: true
+- name: methods.cocoa_mc_masked_nll_trace
+  cfg:
+    inf_method: ConfidenceAtCommit
+    similarity_metric: cross_encoder
+    full_trace: true
+    progress_score: true
+    multiply_by_nfe: true
+- name: methods.cocoa_mc_masked_nll_trace
+  cfg:
+    inf_method: ConfidenceAtCommit
+    similarity_metric: cross_encoder
+    last_block_only: true
+- name: methods.cocoa_mc_masked_nll_trace
+  cfg:
+    inf_method: ConfidenceAtCommit
+    similarity_metric: cross_encoder
+    last_block_only: true
+    multiply_by_nfe: true
+- name: methods.cocoa_mc_masked_nll_trace
+  cfg:
+    inf_method: ConfidenceAtCommit
+    similarity_metric: cross_encoder
+    last_block_only: true
+    progress_score: true
+- name: methods.cocoa_mc_masked_nll_trace
+  cfg:
+    inf_method: ConfidenceAtCommit
+    similarity_metric: cross_encoder
+    last_block_only: true
+    progress_score: true
+    multiply_by_nfe: true
+- name: methods.cocoa_mc_masked_nll_trace
+  cfg:
+    inf_method: ConfidenceAtCommit
+    similarity_metric: cross_encoder
+    block_only: true
+    block_agg: avg
+- name: methods.cocoa_mc_masked_nll_trace
+  cfg:
+    inf_method: ConfidenceAtCommit
+    similarity_metric: cross_encoder
+    block_only: true
+    block_agg: avg
+    multiply_by_nfe: true
+- name: methods.cocoa_mc_masked_nll_trace
+  cfg:
+    inf_method: ConfidenceAtCommit
+    similarity_metric: cross_encoder
+    block_only: true
+    block_agg: avg
+    progress_score: true
+- name: methods.cocoa_mc_masked_nll_trace
+  cfg:
+    inf_method: ConfidenceAtCommit
+    similarity_metric: cross_encoder
+    block_only: true
+    block_agg: avg
+    progress_score: true
+    multiply_by_nfe: true
+- name: methods.cocoa_mc_masked_nll_trace
+  cfg:
+    inf_method: ConfidenceAtCommit
+    similarity_metric: deberta_entail
+- name: methods.cocoa_mc_masked_nll_trace
+  cfg:
+    inf_method: ConfidenceAtCommit
+    similarity_metric: deberta_entail
+    multiply_by_nfe: true
+- name: methods.cocoa_mc_masked_nll_trace
+  cfg:
+    inf_method: ConfidenceAtCommit
+    similarity_metric: deberta_entail
+    progress_score: true
+- name: methods.cocoa_mc_masked_nll_trace
+  cfg:
+    inf_method: ConfidenceAtCommit
+    similarity_metric: deberta_entail
+    progress_score: true
+    multiply_by_nfe: true
+- name: methods.cocoa_mc_masked_nll_trace
+  cfg:
+    inf_method: ConfidenceAtCommit
+    similarity_metric: deberta_entail
+    full_trace: true
+- name: methods.cocoa_mc_masked_nll_trace
+  cfg:
+    inf_method: ConfidenceAtCommit
+    similarity_metric: deberta_entail
+    full_trace: true
+    multiply_by_nfe: true
+- name: methods.cocoa_mc_masked_nll_trace
+  cfg:
+    inf_method: ConfidenceAtCommit
+    similarity_metric: deberta_entail
+    full_trace: true
+    progress_score: true
+- name: methods.cocoa_mc_masked_nll_trace
+  cfg:
+    inf_method: ConfidenceAtCommit
+    similarity_metric: deberta_entail
+    full_trace: true
+    progress_score: true
+    multiply_by_nfe: true
+- name: methods.cocoa_mc_masked_nll_trace
+  cfg:
+    inf_method: ConfidenceAtCommit
+    similarity_metric: deberta_entail
+    last_block_only: true
+- name: methods.cocoa_mc_masked_nll_trace
+  cfg:
+    inf_method: ConfidenceAtCommit
+    similarity_metric: deberta_entail
+    last_block_only: true
+    multiply_by_nfe: true
+- name: methods.cocoa_mc_masked_nll_trace
+  cfg:
+    inf_method: ConfidenceAtCommit
+    similarity_metric: deberta_entail
+    last_block_only: true
+    progress_score: true
+- name: methods.cocoa_mc_masked_nll_trace
+  cfg:
+    inf_method: ConfidenceAtCommit
+    similarity_metric: deberta_entail
+    last_block_only: true
+    progress_score: true
+    multiply_by_nfe: true
+- name: methods.cocoa_mc_masked_nll_trace
+  cfg:
+    inf_method: ConfidenceAtCommit
+    similarity_metric: deberta_entail
+    block_only: true
+    block_agg: avg
+- name: methods.cocoa_mc_masked_nll_trace
+  cfg:
+    inf_method: ConfidenceAtCommit
+    similarity_metric: deberta_entail
+    block_only: true
+    block_agg: avg
+    multiply_by_nfe: true
+- name: methods.cocoa_mc_masked_nll_trace
+  cfg:
+    inf_method: ConfidenceAtCommit
+    similarity_metric: deberta_entail
+    block_only: true
+    block_agg: avg
+    progress_score: true
+- name: methods.cocoa_mc_masked_nll_trace
+  cfg:
+    inf_method: ConfidenceAtCommit
+    similarity_metric: deberta_entail
+    block_only: true
+    block_agg: avg
+    progress_score: true
+    multiply_by_nfe: true

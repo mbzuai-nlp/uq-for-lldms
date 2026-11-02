@@ -1,0 +1,48 @@
+# DiffusionGemma UQ estimators — RUNNABLE-NOW set (docs/diffusiongemma/03_methods.md).
+# Every entry's dependency stats are produced by DiffusionGemmaGreedyProbsCalculator +
+# the kept SemanticMatrix/CrossEncoder/Deberta *trace* calculators (single generation,
+# no repeated sampling). These estimators run UNCHANGED on those stat keys.
+#
+# Covers the user's target methods that need no extra sampling calculator:
+#   MSP, TraceEntropy, ConfidenceAtCommit, D-CoCoA-L, plus trace-native KLE/LUQ.
+# The sampling-based methods (SemanticEntropy, KLE-sampling, CoCoAMSP) additionally need a
+# DiffusionGemma sample-text calculator (K independent decodes) — tracked as the one
+# remaining code piece; do NOT add bare `LUQ`/`KernelLanguageEntropy`/`SemanticEntropy`
+# here until that calculator exists, or the run fails on missing `sample_texts`.
+
+# --- MSP: sum of committed-token log-probs (diffusion-native sequence likelihood). ---
+- name: MaximumSequenceProbability          # deps: greedy_log_likelihoods (synthesized)
+
+# --- Trace entropy / probs (per-step, ~free over generation). ---
+- name: methods.trace_entropy
+  cfg:
+    aggregation: avg
+- name: methods.trace_entropy
+  cfg:
+    aggregation: max
+- name: methods.trace_probs
+  cfg:
+    aggregation: avg
+- name: methods.trace_probs
+  cfg:
+    aggregation: max
+
+# --- Confidence at commit (argmax-stabilisation commit). ---
+- name: methods.confidence_at_commitment
+  cfg:
+    aggregation: avg
+- name: methods.confidence_at_commitment
+  cfg:
+    aggregation: min
+
+# --- Semantic-diversity over the denoising drafts (single gen; NLI/cross-encoder). ---
+- name: methods.kernel_language_entropy_trace   # KLE over intermediate drafts
+- name: methods.luq_trace                        # LUQ over intermediate drafts
+
+# --- D-CoCoA-L: per-block cross-encoder consistency x confidence-at-commit. ---
+- name: methods.cocoa_mc_masked_nll_trace
+  cfg:
+    inf_method: ConfidenceAtCommit
+    similarity_metric: cross_encoder
+    block_only: true
+    block_agg: avg

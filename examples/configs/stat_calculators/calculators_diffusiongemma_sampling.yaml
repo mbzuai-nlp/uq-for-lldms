@@ -1,0 +1,195 @@
+# DiffusionGemma stat calculators WITH sampling. Extends calculators_diffusiongemma.yaml
+# with the K-decode sampling path that unlocks the sampling-based estimators
+# (SemanticEntropy, KLE, LUQ, CoCoA-MSP).
+#
+# lm-polygraph's built-in SamplingGenerationCalculator cannot be used here: it does
+# torch.stack(out.scores) and reads out.hidden_states, while DiffusionGemma's generate()
+# returns scores=None and emits neither. DiffusionGemmaSamplingGenerationCalculator calls
+# generate() samples_n times and reuses the backend's synthesized per-token committed
+# log-probabilities, producing the same stat keys, so every downstream calculator below is
+# the stock lm-polygraph one.
+#
+# COST: each sample is a full diffusion generation, so a run with samples_n=K is roughly
+# K times slower than the greedy-only sweep, plus the NLI/cross-encoder passes.
+- auto
+- name: DiffusionGemmaGreedyProbsCalculator
+  builder: calculators.diffusiongemma_greedy_probs_builder
+  cfg:
+    output_diffusion_stats: True
+    store_full_step_logits: False
+  stats:
+    - "input_texts"
+    - "input_tokens"
+    - "greedy_tokens"
+    - "greedy_texts"
+    - "greedy_log_likelihoods"
+    - "tokenizer"
+    - "nfe"
+    - "remask_count"
+    - "first_remask_step"
+    - "generation_trace"
+    - "full_generation_trace"
+    - "last_block_generation_trace"
+    - "block_generation_traces"
+    - "gen_trace_logits"
+    - "gen_trace_entropy"
+    - "gen_trace_argmax"
+    - "gen_trace_top2gap"
+    - "confidence_at_commit"
+    - "mask_fraction_at_commit"
+  dependencies: []
+- name: SemanticMatrixTraceCalculator
+  builder: calculators.semantic_matrix_trace_builder
+  cfg:
+    nli_model:
+      deberta_path: "microsoft/deberta-large-mnli"
+      hf_cache: null
+      batch_size: 10
+      device: cuda
+  stats:
+    - "semantic_matrix_entail_trace"
+    - "semantic_matrix_contra_trace"
+    - "semantic_matrix_classes_trace"
+    - "semantic_matrix_entail_logits_trace"
+    - "semantic_matrix_contra_logits_trace"
+    - "entailment_id"
+  dependencies:
+    - "generation_trace"
+- name: GreedyCrossEncoderSimilarityMatrixTraceCalculator
+  builder: calculators.greedy_cross_encoder_similarity_trace_builder
+  cfg:
+  stats:
+    - "greedy_sentence_similarity_forward_trace"
+    - "greedy_sentence_similarity_backward_trace"
+    - "greedy_sentence_similarity_trace"
+  dependencies:
+    - "input_texts"
+    - "generation_trace"
+    - "greedy_texts"
+- name: GreedyCrossEncoderSimilarityMatrixFullTraceCalculator
+  builder: calculators.greedy_cross_encoder_similarity_full_trace_builder
+  cfg:
+  stats:
+    - "greedy_sentence_similarity_forward_full_trace"
+    - "greedy_sentence_similarity_backward_full_trace"
+    - "greedy_sentence_similarity_full_trace"
+  dependencies:
+    - "input_texts"
+    - "full_generation_trace" # changed from "generation_trace"
+    - "greedy_texts"
+- name: GreedyCrossEncoderSimilarityMatrixLastBlockTraceCalculator
+  builder: calculators.greedy_cross_encoder_similarity_last_block_trace_builder
+  cfg:
+  stats:
+    - "greedy_sentence_similarity_last_block_forward_trace"
+    - "greedy_sentence_similarity_last_block_backward_trace"
+    - "greedy_sentence_similarity_last_block_trace"
+  dependencies:
+    - "last_block_generation_trace"
+- name: GreedyCrossEncoderSimilarityMatrixBlockTraceCalculator
+  builder: calculators.greedy_cross_encoder_similarity_block_trace_builder
+  cfg:
+  stats:
+    - "greedy_sentence_similarity_block_forward"
+    - "greedy_sentence_similarity_block_backward"
+    - "greedy_sentence_similarity_block"
+  dependencies:
+    - "block_generation_traces"
+- name: GreedyDebertaSimilarityMatrixFullTraceCalculator
+  builder: calculators.greedy_deberta_similarity_full_trace_builder
+  cfg:
+    nli_model:
+      deberta_path: "microsoft/deberta-large-mnli"
+      hf_cache: null
+      batch_size: 10
+      device: cuda
+  stats:
+    - "greedy_deberta_entail_forward_full_trace"
+    - "greedy_deberta_entail_backward_full_trace"
+    - "greedy_deberta_entail_full_trace"
+    - "greedy_deberta_contra_forward_full_trace"
+    - "greedy_deberta_contra_backward_full_trace"
+    - "greedy_deberta_contra_full_trace"
+    - "greedy_deberta_classes_forward_full_trace"
+    - "greedy_deberta_classes_backward_full_trace"
+    - "greedy_deberta_classes_full_trace"
+  dependencies:
+    - "input_texts"
+    - "full_generation_trace"
+    - "greedy_texts"
+- name: GreedyDebertaSimilarityMatrixTraceCalculator
+  builder: calculators.greedy_deberta_similarity_trace_builder
+  cfg:
+    nli_model:
+      deberta_path: "microsoft/deberta-large-mnli"
+      hf_cache: null
+      batch_size: 10
+      device: cuda
+  stats:
+    - "greedy_deberta_entail_forward_trace"
+    - "greedy_deberta_entail_backward_trace"
+    - "greedy_deberta_entail_trace"
+    - "greedy_deberta_contra_forward_trace"
+    - "greedy_deberta_contra_backward_trace"
+    - "greedy_deberta_contra_trace"
+  dependencies:
+    - "generation_trace"
+    - "greedy_texts"
+- name: GreedyDebertaSimilarityMatrixBlockTraceCalculator
+  builder: calculators.greedy_deberta_similarity_block_trace_builder
+  cfg:
+    nli_model:
+      deberta_path: "microsoft/deberta-large-mnli"
+      hf_cache: null
+      batch_size: 10
+      device: cuda
+  stats:
+    - "greedy_deberta_entail_block_forward"
+    - "greedy_deberta_entail_block_backward"
+    - "greedy_deberta_entail_block"
+    - "greedy_deberta_contra_block_forward"
+    - "greedy_deberta_contra_block_backward"
+    - "greedy_deberta_contra_block"
+  dependencies:
+    - "block_generation_traces"
+- name: GreedyDebertaSimilarityMatrixLastBlockTraceCalculator
+  builder: calculators.greedy_deberta_similarity_last_block_trace_builder
+  cfg:
+    nli_model:
+      deberta_path: "microsoft/deberta-large-mnli"
+      hf_cache: null
+      batch_size: 10
+      device: cuda
+  stats:
+    - "greedy_deberta_entail_last_block_forward_trace"
+    - "greedy_deberta_entail_last_block_backward_trace"
+    - "greedy_deberta_entail_last_block_trace"
+    - "greedy_deberta_contra_last_block_forward_trace"
+    - "greedy_deberta_contra_last_block_backward_trace"
+    - "greedy_deberta_contra_last_block_trace"
+  dependencies:
+    - "last_block_generation_trace"
+
+# ---------------------------------------------------------------- sampling path
+- name: DiffusionGemmaSamplingGenerationCalculator
+  builder: calculators.diffusiongemma_sample_builder
+  cfg:
+    samples_n: 10
+    # null = use the model's native sampling (random canvas init + renoising), which keeps
+    # the sampled decodes on the same decoding distribution as the greedy run. Set a float
+    # only for a deliberate diversity ablation; T=2.0 produces word salad.
+    sample_temperature: null
+  stats:
+    - "sample_log_probs"
+    - "sample_log_likelihoods"
+    - "sample_tokens"
+    - "sample_texts"
+  dependencies: []
+
+# The semantic-matrix, semantic-classes and greedy-vs-sample similarity calculators are
+# resolved by the `- auto` entry at the top of this file: lm-polygraph discovers them from
+# its own registry once `sample_texts` is available. Declaring them by hand fails, because
+# not every built-in calculator has a `default_<Name>` builder module (SemanticClasses does
+# not). The explicit DiffusionGemmaSamplingGenerationCalculator entry above still takes
+# precedence over the built-in SamplingGenerationCalculator for `sample_texts`, the same way
+# DiffusionGemmaGreedyProbsCalculator overrides the built-in greedy calculator.

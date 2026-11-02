@@ -1,0 +1,125 @@
+- name: methods.d_cocoa_hybrid
+  cfg:
+    alpha: 0.5
+    k: 1
+    metric_thr: 0.3
+    inf_method: MCMaskedNormalizedNLL
+    full_trace: true
+    multiply_by_nfe: true
+- name: methods.d_cocoa_hybrid
+  cfg:
+    alpha: 0.5
+    k: 2
+    metric_thr: 0.3
+    inf_method: MCMaskedNormalizedNLL
+    full_trace: true
+    multiply_by_nfe: true
+- name: methods.d_cocoa_hybrid
+  cfg:
+    alpha: 0.5
+    k: 5
+    inf_method: MCMaskedNormalizedNLL
+    full_trace: true
+    multiply_by_nfe: true
+- name: methods.d_cocoa_hybrid
+  cfg:
+    alpha: 0.5
+    k: 10
+    inf_method: MCMaskedNormalizedNLL
+    full_trace: true
+    multiply_by_nfe: true
+- name: methods.d_cocoa_hybrid
+  cfg:
+    alpha: 0.5
+    k: 1
+    metric_thr: 0.3
+    inf_method: MCMaskedNLL
+    full_trace: true
+    multiply_by_nfe: true
+- name: methods.d_cocoa_hybrid
+  cfg:
+    alpha: 0.5
+    k: 2
+    metric_thr: 0.3
+    inf_method: MCMaskedNLL
+    full_trace: true
+    multiply_by_nfe: true
+- name: methods.d_cocoa_hybrid
+  cfg:
+    alpha: 0.5
+    k: 5
+    inf_method: MCMaskedNLL
+    full_trace: true
+    multiply_by_nfe: true
+- name: methods.d_cocoa_hybrid
+  cfg:
+    alpha: 0.5
+    k: 10
+    inf_method: MCMaskedNLL
+    full_trace: true
+    multiply_by_nfe: true
+- name: methods.d_cocoa_hybrid
+  cfg:
+    alpha: 0.5
+    k: 1
+    inf_method: ConfidenceAtCommit
+    block_only: true
+    block_agg: avg
+- name: methods.d_cocoa_hybrid
+  cfg:
+    alpha: 0.5
+    k: 2
+    inf_method: ConfidenceAtCommit
+    block_only: true
+    block_agg: avg
+- name: methods.d_cocoa_hybrid
+  cfg:
+    alpha: 0.5
+    k: 5
+    inf_method: ConfidenceAtCommit
+    block_only: true
+    block_agg: avg
+- name: methods.d_cocoa_hybrid
+  cfg:
+    alpha: 0.5
+    k: 10
+    inf_method: ConfidenceAtCommit
+    block_only: true
+    block_agg: avg
+- name: methods.cocoa_mc_masked_nll_trace
+  cfg:
+    inf_method: MCMaskedNLL
+    full_trace: true
+    multiply_by_nfe: true
+- name: methods.cocoa_mc_masked_nll_trace
+  cfg:
+    inf_method: MCMaskedNormalizedNLL
+    full_trace: true
+    multiply_by_nfe: true
+- name: methods.cocoa_mc_masked_nll_trace
+  cfg:
+    inf_method: ConfidenceAtCommit
+    block_only: true
+    block_agg: avg
+- name: methods.d_cocoa_hybrid
+  cfg:
+    alpha: 0.0
+    k: 0
+    inf_method: MCMaskedNLL
+    full_trace: true
+    multiply_by_nfe: true
+- name: methods.d_cocoa_hybrid
+  cfg:
+    alpha: 0.0
+    k: 0
+    inf_method: MCMaskedNormalizedNLL
+    full_trace: true
+    multiply_by_nfe: true
+- name: methods.d_cocoa_hybrid
+  cfg:
+    alpha: 0.0
+    k: 0
+    inf_method: ConfidenceAtCommit
+    block_only: true
+    block_agg: avg
+- name: MaximumSequenceProbability

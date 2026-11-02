@@ -1,0 +1,4 @@
+- name: methods.ad_cosine_similarity
+- name: methods.avg_dissimilarity_trace
+  cfg:
+    full_trace: true

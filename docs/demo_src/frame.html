@@ -1,0 +1,145 @@
+<!doctype html>
+<html><head><meta charset="utf-8">
+<style>
+@font-face{font-family:Inter;src:url(fonts/Inter-Regular.woff2) format("woff2");font-weight:400}
+@font-face{font-family:Inter;src:url(fonts/Inter-SemiBold.woff2) format("woff2");font-weight:600}
+@font-face{font-family:Inter;src:url(fonts/Inter-Bold.woff2) format("woff2");font-weight:700}
+:root{--bg:#fff;--panel:#f7f7fa;--fg:#15171c;--fg2:#5a6170;--fg3:#9aa0ab;--line:#e8e8ef;
+--mask:#eceef2;--ghost:#8b919c;--new:#6d3fd6;--good:#17915f;--goodbg:#e6f5ee;--bad:#d23f36;--badbg:#fdecea;--live:#e5484d}
+*{box-sizing:border-box;margin:0;padding:0}
+body{width:1200px;height:675px;background:var(--bg);color:var(--fg);font:14px/1.5 Inter,sans-serif;overflow:hidden;position:relative}
+.top{height:48px;display:flex;align-items:center;padding:0 24px;border-bottom:1px solid var(--line);font-size:13px;color:var(--fg2)}
+.top b{color:var(--fg);font-weight:600}
+.top .sp{flex:1}
+.prog{position:absolute;left:0;top:47px;height:3px;background:var(--new)}
+.main{display:flex;height:627px}
+.left{width:760px;padding:18px 24px 16px;display:flex;flex-direction:column}
+.right{flex:1;border-left:1px solid var(--line);padding:18px 22px;display:flex;flex-direction:column;gap:14px;background:var(--panel)}
+.lab{font-size:11px;font-weight:600;letter-spacing:.08em;text-transform:uppercase;color:var(--fg3)}
+.q{font-size:15px;line-height:1.45;margin-top:4px}
+.ctx{font-size:12px;color:var(--fg2);line-height:1.45;margin-top:4px;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+.out{flex:1;overflow:hidden;margin-top:16px;padding-top:14px;border-top:1px solid var(--line)}
+.canvas{font-size:var(--fs,13px);line-height:1.6;word-break:break-word}
+.t{white-space:pre-wrap}
+.m{display:inline-block;min-width:12px;height:1.32em;line-height:1.32em;vertical-align:-.26em;font-size:.86em;background:var(--mask);border-radius:4px;margin:0 1px;padding:0 3px;color:var(--ghost);white-space:pre;max-width:120px;overflow:hidden}
+.m.lo{color:#c6cad1}
+.m.n{background:var(--new);color:#fff;font-weight:600}
+.t.j{color:var(--new);font-weight:600}
+.nl{display:block;height:5px}
+.head{display:flex;align-items:center;justify-content:space-between}
+.tag{display:inline-flex;align-items:center;gap:6px;font-size:10.5px;font-weight:700;letter-spacing:.08em;color:var(--live)}
+.tag i{width:7px;height:7px;border-radius:50%;background:var(--live);box-shadow:0 0 0 3px rgba(229,72,77,.18)}
+.tag.off i{opacity:.35;box-shadow:none}
+.tag.done{color:var(--fg3)}.tag.done i{background:var(--fg3);box-shadow:none}
+.big{display:flex;align-items:baseline;gap:10px}
+.big .v{font-size:46px;font-weight:700;font-variant-numeric:tabular-nums;letter-spacing:-.02em;line-height:1.05}
+.big .s{font-size:12.5px;color:var(--fg2)}
+svg{display:block}
+.ans{font-size:13px;color:var(--fg2)}
+.ans b{font-weight:600}
+.cc{border-top:1px solid var(--line);padding-top:12px}
+.cc .v{font-size:30px}
+.bar{height:6px;border-radius:3px;background:#e2e3ea;margin-top:8px;overflow:hidden}
+.bar i{display:block;height:100%;background:#9aa0ab}
+.ff{font-size:10.5px;font-weight:700;color:#8a5a00;background:#fff1d6;border-radius:999px;padding:1px 7px;margin-left:6px}
+.verdict{margin-top:auto;border-radius:12px;padding:12px 14px;font-weight:600;font-size:15px}
+.verdict.ok{background:var(--goodbg);color:var(--good)}
+.verdict.no{background:var(--badbg);color:var(--bad)}
+.verdict small{display:block;font-weight:400;font-size:12px;color:var(--fg2);margin-top:1px}
+</style></head>
+<body>
+<div class="top"><span id="dsn"></span><span class="sp"></span><span>denoising step <b id="st"></b></span></div>
+<div class="prog" id="pg"></div>
+<div class="main">
+ <div class="left">
+  <div id="ctx"></div>
+  <div class="lab">Question</div>
+  <div class="q" id="q"></div>
+  <div class="out"><div class="canvas" id="cv"></div></div>
+ </div>
+ <div class="right">
+  <div>
+   <div class="head"><span class="lab" style="color:var(--fg)">D-CoCoA uncertainty</span><span class="tag" id="tag"><i></i><span id="tagt">LIVE</span></span></div>
+   <div class="big" style="margin-top:6px"><span class="v" id="sv"></span><span class="s" id="sp"></span></div>
+  </div>
+  <svg id="sg" width="396" height="190"></svg>
+  <div class="ans" id="ans"></div>
+  <div class="cc" id="cc" style="display:none"></div>
+  <div id="vd" style="margin-top:auto"></div>
+ </div>
+</div>
+<script>
+function fit(){const cv=document.getElementById("cv"),o=document.querySelector(".out");let f=window.D&&window.D.ds?30:14;
+ for(;f>9;f-=0.25){cv.style.setProperty("--fs",f+"px");if(cv.offsetHeight<=o.clientHeight-20)break}return f}
+function esc(s){return String(s).replace(/&/g,"&amp;").replace(/</g,"&lt;")}
+function render(D,F,clock){
+  const n=D.frames.length, final=F>=n, fr=final?null:D.frames[F], C=D.cmp;
+  const DS=D.dsname||"GSM8K";
+  document.getElementById("dsn").innerHTML=`<b>LLaDA-1.5</b>&nbsp;·&nbsp;${DS}`;
+  document.getElementById("st").textContent=(final?n:F+1)+" / "+n+(D.cum?`  ·  ${D.cum[final?n-1:F].toFixed(D.cum[n-1]<10?2:1)} s`:(D.stepms?`  ·  ${((final?n:F+1)*D.stepms/1000).toFixed(1)} s`:""));
+  document.getElementById("pg").style.width=(final?100:(F+1)/n*100)+"%";
+  document.getElementById("q").textContent=D.question;
+  document.getElementById("ctx").innerHTML=D.context?`<div class="lab">Story (excerpt)</div><div class="ctx">${esc(D.context)}</div><div style="height:10px"></div>`:"";
+  // output being denoised
+  let h="";const commitSet=new Set(final?[]:fr.commit);
+  for(let k=0;k<D.L;k++){
+    const s=final?D.y[k]:fr.state[k];
+    if(s!==null&&s!==undefined){
+      let txt=D.vocab[s]; if(/^<\|.*\|>$/.test(txt))continue;
+      const jus=(!final&&F>0&&D.frames[F-1].commit.includes(k))?" j":"";
+      if(txt.includes("\n")){const parts=txt.split("\n");h+=`<span class="t${jus}">${esc(parts[0])}</span>`+(parts.length>2?'<span class="nl"></span>':"<br>")+`<span class="t">${esc(parts[parts.length-1])}</span>`;}
+      else h+=`<span class="t${jus}">${esc(txt)}</span>`;
+    } else {
+      let g=D.vocab[fr.ghost[k]]||""; if(/^<\|.*\|>$/.test(g))g="∅"; if(g.trim()==="")g="";
+      const lo=fr.conf[k]<0.3?" lo":"";
+      h+=`<span class="m${lo}${commitSet.has(k)?" n":""}">${esc(g.trim()||g)}</span>`;
+    }
+  }
+  document.getElementById("cv").innerHTML=h;
+  // score
+  const S=D.score, idx=final?n-1:F, u=S[idx], above=u!=null&&u>=D.thr;
+  const sv=document.getElementById("sv");
+  sv.textContent=u==null?"—":u.toFixed(2); sv.style.color=u==null?"var(--fg3)":(above?"var(--bad)":"var(--good)");
+  document.getElementById("sp").textContent=(final&&C)?`flag if ≥ ${D.thr.toFixed(2)} · ready ${C.dlabel} after generation`:`flag if ≥ ${D.thr.toFixed(2)}`;
+  const tag=document.getElementById("tag");
+  tag.className="tag"+(final?" done":(Math.floor(F/2)%2?" off":""));
+  document.getElementById("tagt").textContent=final?"FINAL":"LIVE";
+  // chart
+  const W=396,H=C?150:190,pb=16; const sg=document.getElementById("sg"); sg.setAttribute("height",H);
+  const X=t=>4+t*(W-8)/(n-1), Y=v=>(H-pb)-4-Math.min(Math.max(v,0),1)*(H-pb-10);
+  const thrY=Y(D.thr);
+  let svg=`<rect x="0" y="0" width="${W}" height="${H-pb}" rx="8" fill="#fff"/>
+  <rect x="0" y="0" width="${W}" height="${thrY}" rx="8" fill="#fdecea" opacity=".7"/>
+  <line x1="0" x2="${W}" y1="${thrY}" y2="${thrY}" stroke="#e0493f" stroke-dasharray="4 3" stroke-width="1.2"/>
+  <text x="${W-6}" y="${thrY+14}" text-anchor="end" font-size="10.5" font-weight="600" fill="#d23f36">▲ flag</text>
+  <text x="0" y="${H-3}" font-size="10.5" fill="#9aa0ab">denoising step →</text>
+  <text x="${W}" y="${H-3}" text-anchor="end" font-size="10.5" fill="#9aa0ab">0 – 1</text>`;
+  let p="";
+  for(let t=0;t<=idx;t++){if(S[t]==null)continue;p+=(p?"L":"M")+X(t).toFixed(1)+" "+Y(S[t]).toFixed(1)}
+  if(p){svg+=`<path d="${p}" fill="none" stroke="#6d3fd6" stroke-width="2.6" stroke-linejoin="round" stroke-linecap="round"/>`;
+    if(S[idx]!=null)svg+=`<circle cx="${X(idx)}" cy="${Y(S[idx])}" r="4.5" fill="#6d3fd6" stroke="#fff" stroke-width="1.5"/>`}
+  sg.innerHTML=svg;
+  // current answer
+  const okf=f=>f.ok!==undefined?f.ok:f.ans===D.gold;
+  const a=final?D.pred:fr.ans, good=final?(D.pred_ok!==undefined?D.pred_ok:D.pred===D.gold):(a!=null&&okf(fr));
+  const at=a==null?"":(a.length>34?a.slice(0,34)+"…":a);
+  document.getElementById("ans").innerHTML=a==null?`Answer in draft: <b style="color:var(--fg3)">not yet</b>`:
+    `Answer in draft: <b style="color:${good?"var(--good)":"var(--bad)"}">${esc(at)}</b> ${good?"✓":"✗ <span style='color:var(--fg3)'>(ref. "+esc(D.gold)+")</span>"}`;
+  // standard CoCoA (comparison mode)
+  const cc=document.getElementById("cc");
+  if(C){cc.style.display="block";
+    const head=`<div class="head"><span class="lab" style="color:var(--fg)">Standard CoCoA</span>`;
+    if(!final||clock==null) cc.innerHTML=head+`<span class="tag done"><i></i><span>WAITING</span></span></div><div class="ans" style="margin-top:6px">needs extra sampled generations after the answer is finished</div>`;
+    else if(clock<C.total){cc.innerHTML=head+`<span class="tag"><i></i><span>SAMPLING</span></span></div>
+      <div class="big" style="margin-top:4px"><span class="v" style="font-size:30px;color:var(--fg2)">+${clock.toFixed(1)} s</span><span class="s">of ${C.total} s${C.ff>1?`<span class="ff">⏩ ${C.ff}×</span>`:""}</span></div>
+      <div class="bar"><i style="width:${(clock/C.total*100).toFixed(1)}%"></i></div>`}
+    else{const ca=C.score>=C.thr;cc.innerHTML=head+`<span class="tag done"><i></i><span>+${C.total} s</span></span></div>
+      <div class="big" style="margin-top:4px"><span class="v" style="font-size:30px;color:${ca?"var(--bad)":"var(--good)"}">${C.score.toFixed(2)}</span><span class="s">flag if ≥ ${C.thr.toFixed(2)}</span></div>`}
+  } else cc.style.display="none";
+  // verdict
+  const vd=document.getElementById("vd");
+  if(!final||(C&&clock!=null&&clock<C.dover)) vd.innerHTML="";
+  else vd.innerHTML=above?`<div class="verdict no">⚠ Flag — likely hallucination<small>top ${D.pct}% most uncertain on ${DS}</small></div>`
+                         :`<div class="verdict ok">✓ Accept<small>among the ${D.pct}% least uncertain on ${DS}</small></div>`;
+}
+</script></body></html>

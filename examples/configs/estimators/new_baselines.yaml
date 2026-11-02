@@ -1,0 +1,32 @@
+- name: methods.tracedet_timehalu
+  cfg:
+    num_epochs: 100
+    batch_size: 64
+    metric_thr: 0.3
+- name: methods.dynhd
+  cfg:
+    num_epochs: 50
+    pretrain_epochs: 20
+    batch_size: 64
+    lr: 3e-4
+    hidden_dim: 64
+    top_k: 5
+    metric_thr: 0.3
+    margin_quantile: 0.95
+    margin_beta: 0.1
+    grid_search: true
+    validation_fraction: 0.1765
+    refit_on_full: true
+    lr_stage1_grid: [0.0003, 0.001]
+    lr_stage2_grid: [0.0001, 0.0003, 0.001]
+    weight_decay_stage1_grid: [0.0, 0.01, 0.05]
+    weight_decay_stage2_grid: [0.0, 0.0001, 0.001]
+    path_lambda_grid: [0.0, 0.05, 0.1, 0.15, 0.2, 0.25, 0.3, 0.35, 0.4]
+    rebound_lambda_grid: [0.0, 0.05, 0.1, 0.15, 0.2, 0.25, 0.3, 0.35, 0.4]
+    warmup_ratio_grid: [0.0, 0.3]
+- name: PTrue
+- name: Verbalized2S
+  cfg:
+    confidence_prompt: "Provide the probability that your guess is correct. Give ONLY the probability, no other words or explanation.\n\nFor example:\n\nProbability: <the probability between 0.0 and 1.0 that your guess is correct, without any extra commentary whatsoever; just the probability!>"
+    confidence_regex: 'Probability: (\d+\.\d+)'
+- name: MaximumSequenceProbability

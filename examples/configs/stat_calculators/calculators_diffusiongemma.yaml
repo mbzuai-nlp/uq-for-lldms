@@ -1,0 +1,164 @@
+# DiffusionGemma stat calculators. Cloned from new_calculators_llada_no_train.yaml, with
+# the MC/Sample/Block MaskedLL calculators and the Embeddings/Attention calculators
+# DROPPED (not used by the DiffusionGemma method set / prohibitively expensive on the
+# 256k-vocab canvas), the DiffusionGreedyProbs entry swapped for the aggregate-only
+# DiffusionGemmaGreedyProbsCalculator, and the SemanticMatrix + CrossEncoder/Deberta
+# trace calculators KEPT unchanged (they power LUQ-/KLE-trace and D-CoCoA-L).
+- auto
+- name: DiffusionGemmaGreedyProbsCalculator
+  builder: calculators.diffusiongemma_greedy_probs_builder
+  cfg:
+    output_diffusion_stats: True
+    store_full_step_logits: False
+  stats:
+    - "input_texts"
+    - "input_tokens"
+    - "greedy_tokens"
+    - "greedy_texts"
+    - "greedy_log_likelihoods"
+    - "tokenizer"
+    - "nfe"
+    - "remask_count"
+    - "first_remask_step"
+    - "generation_trace"
+    - "full_generation_trace"
+    - "last_block_generation_trace"
+    - "block_generation_traces"
+    - "gen_trace_logits"
+    - "gen_trace_entropy"
+    - "gen_trace_argmax"
+    - "gen_trace_top2gap"
+    - "confidence_at_commit"
+    - "mask_fraction_at_commit"
+  dependencies: []
+- name: SemanticMatrixTraceCalculator
+  builder: calculators.semantic_matrix_trace_builder
+  cfg:
+    nli_model:
+      deberta_path: "microsoft/deberta-large-mnli"
+      hf_cache: null
+      batch_size: 10
+      device: cuda
+  stats:
+    - "semantic_matrix_entail_trace"
+    - "semantic_matrix_contra_trace"
+    - "semantic_matrix_classes_trace"
+    - "semantic_matrix_entail_logits_trace"
+    - "semantic_matrix_contra_logits_trace"
+    - "entailment_id"
+  dependencies:
+    - "generation_trace"
+- name: GreedyCrossEncoderSimilarityMatrixTraceCalculator
+  builder: calculators.greedy_cross_encoder_similarity_trace_builder
+  cfg:
+  stats:
+    - "greedy_sentence_similarity_forward_trace"
+    - "greedy_sentence_similarity_backward_trace"
+    - "greedy_sentence_similarity_trace"
+  dependencies:
+    - "input_texts"
+    - "generation_trace"
+    - "greedy_texts"
+- name: GreedyCrossEncoderSimilarityMatrixFullTraceCalculator
+  builder: calculators.greedy_cross_encoder_similarity_full_trace_builder
+  cfg:
+  stats:
+    - "greedy_sentence_similarity_forward_full_trace"
+    - "greedy_sentence_similarity_backward_full_trace"
+    - "greedy_sentence_similarity_full_trace"
+  dependencies:
+    - "input_texts"
+    - "full_generation_trace" # changed from "generation_trace"
+    - "greedy_texts"
+- name: GreedyCrossEncoderSimilarityMatrixLastBlockTraceCalculator
+  builder: calculators.greedy_cross_encoder_similarity_last_block_trace_builder
+  cfg:
+  stats:
+    - "greedy_sentence_similarity_last_block_forward_trace"
+    - "greedy_sentence_similarity_last_block_backward_trace"
+    - "greedy_sentence_similarity_last_block_trace"
+  dependencies:
+    - "last_block_generation_trace"
+- name: GreedyCrossEncoderSimilarityMatrixBlockTraceCalculator
+  builder: calculators.greedy_cross_encoder_similarity_block_trace_builder
+  cfg:
+  stats:
+    - "greedy_sentence_similarity_block_forward"
+    - "greedy_sentence_similarity_block_backward"
+    - "greedy_sentence_similarity_block"
+  dependencies:
+    - "block_generation_traces"
+- name: GreedyDebertaSimilarityMatrixFullTraceCalculator
+  builder: calculators.greedy_deberta_similarity_full_trace_builder
+  cfg:
+    nli_model:
+      deberta_path: "microsoft/deberta-large-mnli"
+      hf_cache: null
+      batch_size: 10
+      device: cuda
+  stats:
+    - "greedy_deberta_entail_forward_full_trace"
+    - "greedy_deberta_entail_backward_full_trace"
+    - "greedy_deberta_entail_full_trace"
+    - "greedy_deberta_contra_forward_full_trace"
+    - "greedy_deberta_contra_backward_full_trace"
+    - "greedy_deberta_contra_full_trace"
+    - "greedy_deberta_classes_forward_full_trace"
+    - "greedy_deberta_classes_backward_full_trace"
+    - "greedy_deberta_classes_full_trace"
+  dependencies:
+    - "input_texts"
+    - "full_generation_trace"
+    - "greedy_texts"
+- name: GreedyDebertaSimilarityMatrixTraceCalculator
+  builder: calculators.greedy_deberta_similarity_trace_builder
+  cfg:
+    nli_model:
+      deberta_path: "microsoft/deberta-large-mnli"
+      hf_cache: null
+      batch_size: 10
+      device: cuda
+  stats:
+    - "greedy_deberta_entail_forward_trace"
+    - "greedy_deberta_entail_backward_trace"
+    - "greedy_deberta_entail_trace"
+    - "greedy_deberta_contra_forward_trace"
+    - "greedy_deberta_contra_backward_trace"
+    - "greedy_deberta_contra_trace"
+  dependencies:
+    - "generation_trace"
+    - "greedy_texts"
+- name: GreedyDebertaSimilarityMatrixBlockTraceCalculator
+  builder: calculators.greedy_deberta_similarity_block_trace_builder
+  cfg:
+    nli_model:
+      deberta_path: "microsoft/deberta-large-mnli"
+      hf_cache: null
+      batch_size: 10
+      device: cuda
+  stats:
+    - "greedy_deberta_entail_block_forward"
+    - "greedy_deberta_entail_block_backward"
+    - "greedy_deberta_entail_block"
+    - "greedy_deberta_contra_block_forward"
+    - "greedy_deberta_contra_block_backward"
+    - "greedy_deberta_contra_block"
+  dependencies:
+    - "block_generation_traces"
+- name: GreedyDebertaSimilarityMatrixLastBlockTraceCalculator
+  builder: calculators.greedy_deberta_similarity_last_block_trace_builder
+  cfg:
+    nli_model:
+      deberta_path: "microsoft/deberta-large-mnli"
+      hf_cache: null
+      batch_size: 10
+      device: cuda
+  stats:
+    - "greedy_deberta_entail_last_block_forward_trace"
+    - "greedy_deberta_entail_last_block_backward_trace"
+    - "greedy_deberta_entail_last_block_trace"
+    - "greedy_deberta_contra_last_block_forward_trace"
+    - "greedy_deberta_contra_last_block_backward_trace"
+    - "greedy_deberta_contra_last_block_trace"
+  dependencies:
+    - "last_block_generation_trace"

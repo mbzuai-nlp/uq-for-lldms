@@ -1,0 +1,3223 @@
+# Complete LLaDA estimator sweep.
+# Exact union of all *llada*.yaml configs with duplicate entries removed.
+# Claim-only estimators, superseded layer-less RAUQ/AttentionScore entries, and the duplicate legacy Focus are excluded.
+- name: MaximumSequenceProbability
+- name: Perplexity
+- name: MeanTokenEntropy
+- name: MeanPointwiseMutualInformation
+- name: SelfCertainty
+- name: MeanConditionalPointwiseMutualInformation
+- name: ClaimConditionedProbability
+- name: PTrue
+- name: PTrueSampling
+- name: MonteCarloSequenceEntropy
+- name: MonteCarloNormalizedSequenceEntropy
+- name: LexicalSimilarity
+  cfg:
+    metric: rouge1
+- name: LexicalSimilarity
+  cfg:
+    metric: rouge2
+- name: LexicalSimilarity
+  cfg:
+    metric: rougeL
+- name: LexicalSimilarity
+  cfg:
+    metric: BLEU
+- name: NumSemSets
+- name: EigValLaplacian
+  cfg:
+    similarity_score: NLI_score
+    affinity: entail
+- name: EigValLaplacian
+  cfg:
+    similarity_score: NLI_score
+    affinity: contra
+- name: EigValLaplacian
+  cfg:
+    similarity_score: Jaccard_score
+- name: DegMat
+  cfg:
+    similarity_score: NLI_score
+    affinity: entail
+- name: DegMat
+  cfg:
+    similarity_score: NLI_score
+    affinity: contra
+- name: DegMat
+  cfg:
+    similarity_score: Jaccard_score
+- name: Eccentricity
+  cfg:
+    similarity_score: NLI_score
+    affinity: entail
+- name: Eccentricity
+  cfg:
+    similarity_score: NLI_score
+    affinity: contra
+- name: Eccentricity
+  cfg:
+    similarity_score: Jaccard_score
+- name: SemanticEntropy
+- name: SemanticEntropy
+  cfg:
+    entropy_estimation: direct
+- name: SAR
+- name: TokenSAR
+- name: SentenceSAR
+- name: LUQ
+- name: KernelLanguageEntropy
+- name: EigenScore
+- name: RenyiNeg
+- name: FisherRao
+- name: MahalanobisDistanceSeq
+- name: RelativeMahalanobisDistanceSeq
+- name: RDESeq
+- name: PPLMDSeq
+  cfg:
+    md_type: MD
+- name: PPLMDSeq
+  cfg:
+    md_type: RMD
+- name: Focus
+  cfg:
+    model_name: ${model.path}
+    path: ${cache_path}/focus/${model.path}/token_idf.pkl
+    gamma: 0.9
+    p: 0.01
+    idf_dataset: LM-Polygraph/RedPajama-Data-100-Sample-For-Test
+    trust_remote_code: true
+    idf_seed: 42
+    idf_dataset_size: -1
+    spacy_path: en_core_web_sm
+- name: AttentionScore
+  cfg:
+    layer: 18
+    gen_only: false
+- name: RAUQ
+  cfg:
+    n_layers: 36
+    alpha: 0.2
+    use_entropy: false
+- name: RAUQ
+  cfg:
+    n_layers: 36
+    alpha: 0.8
+    use_entropy: true
+- name: CSL
+- name: CocoaMSP
+- name: CocoaPPL
+- name: CocoaMTE
+- name: SemanticDensity
+- name: BoostedProbSequence
+- name: SAPLMA
+  cfg:
+    model_name: ${model.path}
+- name: MIND
+  cfg:
+    metric_thr: 0.3
+- name: Sheeps
+  cfg:
+    metric_thr: 0.3
+    model_name: ${model.path}
+- name: SATRMD
+  cfg:
+    metric_thr: 0.3
+    model_name: ${model.path}
+    base_method: RelativeTokenMahalanobis
+- name: LookBackLens
+  cfg:
+    metric_thr: 0.3
+- name: TAD
+- name: methods.mc_masked_nll
+- name: methods.mc_masked_normalized_nll
+- name: methods.block_mc_masked_nll
+- name: methods.trace_probs
+  cfg:
+    aggregation: avg
+- name: methods.trace_probs
+  cfg:
+    aggregation: max
+- name: methods.trace_entropy
+  cfg:
+    aggregation: avg
+- name: methods.trace_entropy
+  cfg:
+    aggregation: max
+- name: methods.nfe_uncertainty
+- name: methods.remask_count
+  cfg:
+    aggregation: mean
+- name: methods.remask_count
+  cfg:
+    aggregation: max
+- name: methods.remask_count
+  cfg:
+    aggregation: sum
+- name: methods.first_remask_step_count
+  cfg:
+    aggregation: count
+- name: methods.first_remask_step_count
+  cfg:
+    aggregation: mean_step
+- name: methods.lexical_similarity_trace
+  cfg:
+    metric: rouge1
+- name: methods.lexical_similarity_trace
+  cfg:
+    metric: rouge2
+- name: methods.lexical_similarity_trace
+  cfg:
+    metric: rougeL
+- name: methods.lexical_similarity_trace
+  cfg:
+    metric: BLEU
+- name: methods.deg_mat_trace
+  cfg:
+    similarity_score: NLI_score
+    affinity: entail
+- name: methods.deg_mat_trace
+  cfg:
+    similarity_score: NLI_score
+    affinity: contra
+- name: methods.deg_mat_trace
+  cfg:
+    similarity_score: Jaccard_score
+- name: methods.eccentricity_trace
+  cfg:
+    similarity_score: NLI_score
+    affinity: entail
+- name: methods.eccentricity_trace
+  cfg:
+    similarity_score: NLI_score
+    affinity: contra
+- name: methods.eccentricity_trace
+  cfg:
+    similarity_score: Jaccard_score
+- name: methods.eig_val_laplacian_trace
+  cfg:
+    similarity_score: NLI_score
+    affinity: entail
+- name: methods.eig_val_laplacian_trace
+  cfg:
+    similarity_score: NLI_score
+    affinity: contra
+- name: methods.eig_val_laplacian_trace
+  cfg:
+    similarity_score: Jaccard_score
+- name: methods.cocoa_mc_masked_nll_trace
+  cfg:
+    inf_method: MCMaskedNLL
+- name: methods.cocoa_mc_masked_nll_trace
+  cfg:
+    inf_method: MCMaskedNLL
+    progress_score: true
+- name: methods.cocoa_mc_masked_nll_trace
+  cfg:
+    inf_method: MCMaskedNormalizedNLL
+- name: methods.cocoa_mc_masked_nll_trace
+  cfg:
+    inf_method: MCMaskedNormalizedNLL
+    progress_score: true
+- name: methods.cocoa_mc_masked_nll_trace
+  cfg:
+    inf_method: MCMaskedNLL
+    multiply_by_nfe: true
+- name: methods.cocoa_mc_masked_nll_trace
+  cfg:
+    inf_method: MCMaskedNLL
+    progress_score: true
+    multiply_by_nfe: true
+- name: methods.cocoa_mc_masked_nll_trace
+  cfg:
+    inf_method: MCMaskedNormalizedNLL
+    multiply_by_nfe: true
+- name: methods.cocoa_mc_masked_nll_trace
+  cfg:
+    inf_method: MCMaskedNormalizedNLL
+    progress_score: true
+    multiply_by_nfe: true
+- name: methods.cocoa_mc_masked_nll_trace
+  cfg:
+    inf_method: NFE
+    progress_score: true
+    multiply_by_nfe: false
+- name: methods.cocoa_mc_masked_nll_trace
+  cfg:
+    inf_method: NFE
+    progress_score: false
+    multiply_by_nfe: false
+- name: methods.cocoa_mc_masked_nll_trace
+  cfg:
+    inf_method: MCMaskedNLL
+    full_trace: true
+- name: methods.cocoa_mc_masked_nll_trace
+  cfg:
+    inf_method: MCMaskedNLL
+    full_trace: true
+    progress_score: true
+- name: methods.cocoa_mc_masked_nll_trace
+  cfg:
+    inf_method: MCMaskedNLL
+    last_block_only: true
+- name: methods.cocoa_mc_masked_nll_trace
+  cfg:
+    inf_method: MCMaskedNLL
+    last_block_only: true
+    progress_score: true
+- name: methods.cocoa_mc_masked_nll_trace
+  cfg:
+    inf_method: MCMaskedNormalizedNLL
+    full_trace: true
+- name: methods.cocoa_mc_masked_nll_trace
+  cfg:
+    inf_method: MCMaskedNormalizedNLL
+    full_trace: true
+    progress_score: true
+- name: methods.cocoa_mc_masked_nll_trace
+  cfg:
+    inf_method: MCMaskedNormalizedNLL
+    last_block_only: true
+- name: methods.cocoa_mc_masked_nll_trace
+  cfg:
+    inf_method: MCMaskedNormalizedNLL
+    last_block_only: true
+    progress_score: true
+- name: methods.cocoa_mc_masked_nll_trace
+  cfg:
+    inf_method: MCMaskedNLL
+    full_trace: true
+    multiply_by_nfe: true
+- name: methods.cocoa_mc_masked_nll_trace
+  cfg:
+    inf_method: MCMaskedNLL
+    full_trace: true
+    progress_score: true
+    multiply_by_nfe: true
+- name: methods.cocoa_mc_masked_nll_trace
+  cfg:
+    inf_method: MCMaskedNLL
+    last_block_only: true
+    multiply_by_nfe: true
+- name: methods.cocoa_mc_masked_nll_trace
+  cfg:
+    inf_method: MCMaskedNLL
+    last_block_only: true
+    progress_score: true
+    multiply_by_nfe: true
+- name: methods.cocoa_mc_masked_nll_trace
+  cfg:
+    inf_method: MCMaskedNormalizedNLL
+    full_trace: true
+    multiply_by_nfe: true
+- name: methods.cocoa_mc_masked_nll_trace
+  cfg:
+    inf_method: MCMaskedNormalizedNLL
+    full_trace: true
+    progress_score: true
+    multiply_by_nfe: true
+- name: methods.cocoa_mc_masked_nll_trace
+  cfg:
+    inf_method: MCMaskedNormalizedNLL
+    last_block_only: true
+    multiply_by_nfe: true
+- name: methods.cocoa_mc_masked_nll_trace
+  cfg:
+    inf_method: MCMaskedNormalizedNLL
+    last_block_only: true
+    progress_score: true
+    multiply_by_nfe: true
+- name: methods.cocoa_mc_masked_nll_trace
+  cfg:
+    inf_method: MCMaskedNLL
+    inverse_progress_score: true
+- name: methods.cocoa_mc_masked_nll_trace
+  cfg:
+    inf_method: MCMaskedNLL
+    inverse_progress_score: true
+    multiply_by_nfe: true
+- name: methods.cocoa_mc_masked_nll_trace
+  cfg:
+    inf_method: MCMaskedNormalizedNLL
+    inverse_progress_score: true
+- name: methods.cocoa_mc_masked_nll_trace
+  cfg:
+    inf_method: MCMaskedNormalizedNLL
+    inverse_progress_score: true
+    multiply_by_nfe: true
+- name: methods.cocoa_mc_masked_nll_trace
+  cfg:
+    inf_method: MCMaskedNLL
+    full_trace: true
+    inverse_progress_score: true
+- name: methods.cocoa_mc_masked_nll_trace
+  cfg:
+    inf_method: MCMaskedNLL
+    full_trace: true
+    inverse_progress_score: true
+    multiply_by_nfe: true
+- name: methods.cocoa_mc_masked_nll_trace
+  cfg:
+    inf_method: MCMaskedNormalizedNLL
+    full_trace: true
+    inverse_progress_score: true
+- name: methods.cocoa_mc_masked_nll_trace
+  cfg:
+    inf_method: MCMaskedNormalizedNLL
+    full_trace: true
+    inverse_progress_score: true
+    multiply_by_nfe: true
+- name: methods.cocoa_mc_masked_nll_trace
+  cfg:
+    inf_method: MCMaskedNLL
+    last_block_only: true
+    inverse_progress_score: true
+- name: methods.cocoa_mc_masked_nll_trace
+  cfg:
+    inf_method: MCMaskedNLL
+    last_block_only: true
+    inverse_progress_score: true
+    multiply_by_nfe: true
+- name: methods.cocoa_mc_masked_nll_trace
+  cfg:
+    inf_method: MCMaskedNormalizedNLL
+    last_block_only: true
+    inverse_progress_score: true
+- name: methods.cocoa_mc_masked_nll_trace
+  cfg:
+    inf_method: MCMaskedNormalizedNLL
+    last_block_only: true
+    inverse_progress_score: true
+    multiply_by_nfe: true
+- name: methods.cocoa_mc_masked_nll_trace
+  cfg:
+    inf_method: MCMaskedNLL
+    block_only: true
+    block_agg: avg
+- name: methods.cocoa_mc_masked_nll_trace
+  cfg:
+    inf_method: MCMaskedNLL
+    block_only: true
+    block_agg: avg
+    multiply_by_nfe: true
+- name: methods.cocoa_mc_masked_nll_trace
+  cfg:
+    inf_method: MCMaskedNormalizedNLL
+    block_only: true
+    block_agg: avg
+- name: methods.cocoa_mc_masked_nll_trace
+  cfg:
+    inf_method: MCMaskedNormalizedNLL
+    block_only: true
+    block_agg: avg
+    multiply_by_nfe: true
+- name: methods.cocoa_mc_masked_nll_trace
+  cfg:
+    inf_method: MCMaskedNLL
+    block_only: true
+    block_agg: avg
+    progress_score: true
+- name: methods.cocoa_mc_masked_nll_trace
+  cfg:
+    inf_method: MCMaskedNLL
+    block_only: true
+    block_agg: avg
+    progress_score: true
+    multiply_by_nfe: true
+- name: methods.cocoa_mc_masked_nll_trace
+  cfg:
+    inf_method: MCMaskedNormalizedNLL
+    block_only: true
+    block_agg: avg
+    progress_score: true
+- name: methods.cocoa_mc_masked_nll_trace
+  cfg:
+    inf_method: MCMaskedNormalizedNLL
+    block_only: true
+    block_agg: avg
+    progress_score: true
+    multiply_by_nfe: true
+- name: methods.cocoa_mc_masked_nll_trace
+  cfg:
+    inf_method: MCMaskedNLL
+    block_only: true
+    block_agg: avg
+    inverse_progress_score: true
+- name: methods.cocoa_mc_masked_nll_trace
+  cfg:
+    inf_method: MCMaskedNLL
+    block_only: true
+    block_agg: avg
+    inverse_progress_score: true
+    multiply_by_nfe: true
+- name: methods.cocoa_mc_masked_nll_trace
+  cfg:
+    inf_method: MCMaskedNormalizedNLL
+    block_only: true
+    block_agg: avg
+    inverse_progress_score: true
+- name: methods.cocoa_mc_masked_nll_trace
+  cfg:
+    inf_method: MCMaskedNormalizedNLL
+    block_only: true
+    block_agg: avg
+    inverse_progress_score: true
+    multiply_by_nfe: true
+- name: methods.cocoa_mc_masked_nll_trace
+  cfg:
+    inf_method: MCMaskedNLL
+    block_only: true
+    block_agg: max
+- name: methods.cocoa_mc_masked_nll_trace
+  cfg:
+    inf_method: MCMaskedNLL
+    block_only: true
+    block_agg: max
+    multiply_by_nfe: true
+- name: methods.cocoa_mc_masked_nll_trace
+  cfg:
+    inf_method: MCMaskedNormalizedNLL
+    block_only: true
+    block_agg: max
+- name: methods.cocoa_mc_masked_nll_trace
+  cfg:
+    inf_method: MCMaskedNormalizedNLL
+    block_only: true
+    block_agg: max
+    multiply_by_nfe: true
+- name: methods.cocoa_mc_masked_nll_trace
+  cfg:
+    inf_method: MCMaskedNLL
+    block_only: true
+    block_agg: max
+    progress_score: true
+- name: methods.cocoa_mc_masked_nll_trace
+  cfg:
+    inf_method: MCMaskedNLL
+    block_only: true
+    block_agg: max
+    progress_score: true
+    multiply_by_nfe: true
+- name: methods.cocoa_mc_masked_nll_trace
+  cfg:
+    inf_method: MCMaskedNormalizedNLL
+    block_only: true
+    block_agg: max
+    progress_score: true
+- name: methods.cocoa_mc_masked_nll_trace
+  cfg:
+    inf_method: MCMaskedNormalizedNLL
+    block_only: true
+    block_agg: max
+    progress_score: true
+    multiply_by_nfe: true
+- name: methods.cocoa_mc_masked_nll_trace
+  cfg:
+    inf_method: MCMaskedNLL
+    block_only: true
+    block_agg: max
+    inverse_progress_score: true
+- name: methods.cocoa_mc_masked_nll_trace
+  cfg:
+    inf_method: MCMaskedNLL
+    block_only: true
+    block_agg: max
+    inverse_progress_score: true
+    multiply_by_nfe: true
+- name: methods.cocoa_mc_masked_nll_trace
+  cfg:
+    inf_method: MCMaskedNormalizedNLL
+    block_only: true
+    block_agg: max
+    inverse_progress_score: true
+- name: methods.cocoa_mc_masked_nll_trace
+  cfg:
+    inf_method: MCMaskedNormalizedNLL
+    block_only: true
+    block_agg: max
+    inverse_progress_score: true
+    multiply_by_nfe: true
+- name: methods.cocoa_mc_masked_nll_trace
+  cfg:
+    inf_method: MCMaskedNLL
+    similarity_metric: deberta_entail
+    full_trace: true
+- name: methods.cocoa_mc_masked_nll_trace
+  cfg:
+    inf_method: MCMaskedNLL
+    similarity_metric: deberta_entail
+    full_trace: true
+    multiply_by_nfe: true
+- name: methods.cocoa_mc_masked_nll_trace
+  cfg:
+    inf_method: MCMaskedNormalizedNLL
+    similarity_metric: deberta_entail
+    full_trace: true
+- name: methods.cocoa_mc_masked_nll_trace
+  cfg:
+    inf_method: MCMaskedNormalizedNLL
+    similarity_metric: deberta_entail
+    full_trace: true
+    multiply_by_nfe: true
+- name: methods.cocoa_mc_masked_nll_trace
+  cfg:
+    inf_method: MCMaskedNLL
+    similarity_metric: deberta_entail
+    full_trace: true
+    progress_score: true
+- name: methods.cocoa_mc_masked_nll_trace
+  cfg:
+    inf_method: MCMaskedNLL
+    similarity_metric: deberta_entail
+    full_trace: true
+    progress_score: true
+    multiply_by_nfe: true
+- name: methods.cocoa_mc_masked_nll_trace
+  cfg:
+    inf_method: MCMaskedNormalizedNLL
+    similarity_metric: deberta_entail
+    full_trace: true
+    progress_score: true
+- name: methods.cocoa_mc_masked_nll_trace
+  cfg:
+    inf_method: MCMaskedNormalizedNLL
+    similarity_metric: deberta_entail
+    full_trace: true
+    progress_score: true
+    multiply_by_nfe: true
+- name: methods.cocoa_mc_masked_nll_trace
+  cfg:
+    inf_method: MCMaskedNLL
+    similarity_metric: deberta_entail
+    full_trace: true
+    inverse_progress_score: true
+- name: methods.cocoa_mc_masked_nll_trace
+  cfg:
+    inf_method: MCMaskedNLL
+    similarity_metric: deberta_entail
+    full_trace: true
+    inverse_progress_score: true
+    multiply_by_nfe: true
+- name: methods.cocoa_mc_masked_nll_trace
+  cfg:
+    inf_method: MCMaskedNormalizedNLL
+    similarity_metric: deberta_entail
+    full_trace: true
+    inverse_progress_score: true
+- name: methods.cocoa_mc_masked_nll_trace
+  cfg:
+    inf_method: MCMaskedNormalizedNLL
+    similarity_metric: deberta_entail
+    full_trace: true
+    inverse_progress_score: true
+    multiply_by_nfe: true
+- name: methods.cocoa_mc_masked_nll_trace
+  cfg:
+    inf_method: MCMaskedNLL
+    similarity_metric: deberta_contra
+    full_trace: true
+- name: methods.cocoa_mc_masked_nll_trace
+  cfg:
+    inf_method: MCMaskedNLL
+    similarity_metric: deberta_contra
+    full_trace: true
+    multiply_by_nfe: true
+- name: methods.cocoa_mc_masked_nll_trace
+  cfg:
+    inf_method: MCMaskedNormalizedNLL
+    similarity_metric: deberta_contra
+    full_trace: true
+- name: methods.cocoa_mc_masked_nll_trace
+  cfg:
+    inf_method: MCMaskedNormalizedNLL
+    similarity_metric: deberta_contra
+    full_trace: true
+    multiply_by_nfe: true
+- name: methods.cocoa_mc_masked_nll_trace
+  cfg:
+    inf_method: MCMaskedNLL
+    similarity_metric: deberta_contra
+    full_trace: true
+    progress_score: true
+- name: methods.cocoa_mc_masked_nll_trace
+  cfg:
+    inf_method: MCMaskedNLL
+    similarity_metric: deberta_contra
+    full_trace: true
+    progress_score: true
+    multiply_by_nfe: true
+- name: methods.cocoa_mc_masked_nll_trace
+  cfg:
+    inf_method: MCMaskedNormalizedNLL
+    similarity_metric: deberta_contra
+    full_trace: true
+    progress_score: true
+- name: methods.cocoa_mc_masked_nll_trace
+  cfg:
+    inf_method: MCMaskedNormalizedNLL
+    similarity_metric: deberta_contra
+    full_trace: true
+    progress_score: true
+    multiply_by_nfe: true
+- name: methods.cocoa_mc_masked_nll_trace
+  cfg:
+    inf_method: MCMaskedNLL
+    similarity_metric: deberta_contra
+    full_trace: true
+    inverse_progress_score: true
+- name: methods.cocoa_mc_masked_nll_trace
+  cfg:
+    inf_method: MCMaskedNLL
+    similarity_metric: deberta_contra
+    full_trace: true
+    inverse_progress_score: true
+    multiply_by_nfe: true
+- name: methods.cocoa_mc_masked_nll_trace
+  cfg:
+    inf_method: MCMaskedNormalizedNLL
+    similarity_metric: deberta_contra
+    full_trace: true
+    inverse_progress_score: true
+- name: methods.cocoa_mc_masked_nll_trace
+  cfg:
+    inf_method: MCMaskedNormalizedNLL
+    similarity_metric: deberta_contra
+    full_trace: true
+    inverse_progress_score: true
+    multiply_by_nfe: true
+- name: methods.avg_dissimilarity_trace
+- name: methods.avg_dissimilarity_trace
+  cfg:
+    progress_score: true
+- name: methods.avg_dissimilarity_trace
+  cfg:
+    inverse_progress_score: true
+- name: methods.avg_dissimilarity_trace
+  cfg:
+    full_trace: true
+- name: methods.avg_dissimilarity_trace
+  cfg:
+    full_trace: true
+    progress_score: true
+- name: methods.avg_dissimilarity_trace
+  cfg:
+    full_trace: true
+    inverse_progress_score: true
+- name: methods.avg_dissimilarity_trace
+  cfg:
+    last_block_only: true
+- name: methods.avg_dissimilarity_trace
+  cfg:
+    last_block_only: true
+    progress_score: true
+- name: methods.avg_dissimilarity_trace
+  cfg:
+    last_block_only: true
+    inverse_progress_score: true
+- name: methods.avg_dissimilarity_trace
+  cfg:
+    block_only: true
+    block_agg: avg
+- name: methods.avg_dissimilarity_trace
+  cfg:
+    block_only: true
+    block_agg: avg
+    progress_score: true
+- name: methods.avg_dissimilarity_trace
+  cfg:
+    block_only: true
+    block_agg: avg
+    inverse_progress_score: true
+- name: methods.avg_dissimilarity_trace
+  cfg:
+    block_only: true
+    block_agg: max
+- name: methods.avg_dissimilarity_trace
+  cfg:
+    block_only: true
+    block_agg: max
+    progress_score: true
+- name: methods.avg_dissimilarity_trace
+  cfg:
+    block_only: true
+    block_agg: max
+    inverse_progress_score: true
+- name: methods.avg_dissimilarity_trace
+  cfg:
+    similarity_metric: deberta_entail
+    full_trace: true
+- name: methods.avg_dissimilarity_trace
+  cfg:
+    similarity_metric: deberta_entail
+    full_trace: true
+    progress_score: true
+- name: methods.avg_dissimilarity_trace
+  cfg:
+    similarity_metric: deberta_entail
+    full_trace: true
+    inverse_progress_score: true
+- name: methods.avg_dissimilarity_trace
+  cfg:
+    similarity_metric: deberta_contra
+    full_trace: true
+- name: methods.avg_dissimilarity_trace
+  cfg:
+    similarity_metric: deberta_contra
+    full_trace: true
+    progress_score: true
+- name: methods.avg_dissimilarity_trace
+  cfg:
+    similarity_metric: deberta_contra
+    full_trace: true
+    inverse_progress_score: true
+- name: methods.cocoa_mc_masked_nll_trace
+  cfg:
+    inf_method: MCMaskedNLL
+    similarity_metric: deberta_entail
+    block_only: true
+    block_agg: avg
+- name: methods.cocoa_mc_masked_nll_trace
+  cfg:
+    inf_method: MCMaskedNLL
+    similarity_metric: deberta_entail
+    block_only: true
+    block_agg: avg
+    multiply_by_nfe: true
+- name: methods.cocoa_mc_masked_nll_trace
+  cfg:
+    inf_method: MCMaskedNormalizedNLL
+    similarity_metric: deberta_entail
+    block_only: true
+    block_agg: avg
+- name: methods.cocoa_mc_masked_nll_trace
+  cfg:
+    inf_method: MCMaskedNormalizedNLL
+    similarity_metric: deberta_entail
+    block_only: true
+    block_agg: avg
+    multiply_by_nfe: true
+- name: methods.cocoa_mc_masked_nll_trace
+  cfg:
+    inf_method: MCMaskedNLL
+    similarity_metric: deberta_entail
+    block_only: true
+    block_agg: avg
+    progress_score: true
+- name: methods.cocoa_mc_masked_nll_trace
+  cfg:
+    inf_method: MCMaskedNLL
+    similarity_metric: deberta_entail
+    block_only: true
+    block_agg: avg
+    progress_score: true
+    multiply_by_nfe: true
+- name: methods.cocoa_mc_masked_nll_trace
+  cfg:
+    inf_method: MCMaskedNormalizedNLL
+    similarity_metric: deberta_entail
+    block_only: true
+    block_agg: avg
+    progress_score: true
+- name: methods.cocoa_mc_masked_nll_trace
+  cfg:
+    inf_method: MCMaskedNormalizedNLL
+    similarity_metric: deberta_entail
+    block_only: true
+    block_agg: avg
+    progress_score: true
+    multiply_by_nfe: true
+- name: methods.cocoa_mc_masked_nll_trace
+  cfg:
+    inf_method: MCMaskedNLL
+    similarity_metric: deberta_entail
+    block_only: true
+    block_agg: avg
+    inverse_progress_score: true
+- name: methods.cocoa_mc_masked_nll_trace
+  cfg:
+    inf_method: MCMaskedNLL
+    similarity_metric: deberta_entail
+    block_only: true
+    block_agg: avg
+    inverse_progress_score: true
+    multiply_by_nfe: true
+- name: methods.cocoa_mc_masked_nll_trace
+  cfg:
+    inf_method: MCMaskedNormalizedNLL
+    similarity_metric: deberta_entail
+    block_only: true
+    block_agg: avg
+    inverse_progress_score: true
+- name: methods.cocoa_mc_masked_nll_trace
+  cfg:
+    inf_method: MCMaskedNormalizedNLL
+    similarity_metric: deberta_entail
+    block_only: true
+    block_agg: avg
+    inverse_progress_score: true
+    multiply_by_nfe: true
+- name: methods.cocoa_mc_masked_nll_trace
+  cfg:
+    inf_method: MCMaskedNLL
+    similarity_metric: deberta_entail
+    block_only: true
+    block_agg: max
+- name: methods.cocoa_mc_masked_nll_trace
+  cfg:
+    inf_method: MCMaskedNLL
+    similarity_metric: deberta_entail
+    block_only: true
+    block_agg: max
+    multiply_by_nfe: true
+- name: methods.cocoa_mc_masked_nll_trace
+  cfg:
+    inf_method: MCMaskedNormalizedNLL
+    similarity_metric: deberta_entail
+    block_only: true
+    block_agg: max
+- name: methods.cocoa_mc_masked_nll_trace
+  cfg:
+    inf_method: MCMaskedNormalizedNLL
+    similarity_metric: deberta_entail
+    block_only: true
+    block_agg: max
+    multiply_by_nfe: true
+- name: methods.cocoa_mc_masked_nll_trace
+  cfg:
+    inf_method: MCMaskedNLL
+    similarity_metric: deberta_entail
+    block_only: true
+    block_agg: max
+    progress_score: true
+- name: methods.cocoa_mc_masked_nll_trace
+  cfg:
+    inf_method: MCMaskedNLL
+    similarity_metric: deberta_entail
+    block_only: true
+    block_agg: max
+    progress_score: true
+    multiply_by_nfe: true
+- name: methods.cocoa_mc_masked_nll_trace
+  cfg:
+    inf_method: MCMaskedNormalizedNLL
+    similarity_metric: deberta_entail
+    block_only: true
+    block_agg: max
+    progress_score: true
+- name: methods.cocoa_mc_masked_nll_trace
+  cfg:
+    inf_method: MCMaskedNormalizedNLL
+    similarity_metric: deberta_entail
+    block_only: true
+    block_agg: max
+    progress_score: true
+    multiply_by_nfe: true
+- name: methods.cocoa_mc_masked_nll_trace
+  cfg:
+    inf_method: MCMaskedNLL
+    similarity_metric: deberta_entail
+    block_only: true
+    block_agg: max
+    inverse_progress_score: true
+- name: methods.cocoa_mc_masked_nll_trace
+  cfg:
+    inf_method: MCMaskedNLL
+    similarity_metric: deberta_entail
+    block_only: true
+    block_agg: max
+    inverse_progress_score: true
+    multiply_by_nfe: true
+- name: methods.cocoa_mc_masked_nll_trace
+  cfg:
+    inf_method: MCMaskedNormalizedNLL
+    similarity_metric: deberta_entail
+    block_only: true
+    block_agg: max
+    inverse_progress_score: true
+- name: methods.cocoa_mc_masked_nll_trace
+  cfg:
+    inf_method: MCMaskedNormalizedNLL
+    similarity_metric: deberta_entail
+    block_only: true
+    block_agg: max
+    inverse_progress_score: true
+    multiply_by_nfe: true
+- name: methods.cocoa_mc_masked_nll_trace
+  cfg:
+    inf_method: MCMaskedNLL
+    similarity_metric: deberta_entail
+    last_block_only: true
+- name: methods.cocoa_mc_masked_nll_trace
+  cfg:
+    inf_method: MCMaskedNLL
+    similarity_metric: deberta_entail
+    last_block_only: true
+    multiply_by_nfe: true
+- name: methods.cocoa_mc_masked_nll_trace
+  cfg:
+    inf_method: MCMaskedNormalizedNLL
+    similarity_metric: deberta_entail
+    last_block_only: true
+- name: methods.cocoa_mc_masked_nll_trace
+  cfg:
+    inf_method: MCMaskedNormalizedNLL
+    similarity_metric: deberta_entail
+    last_block_only: true
+    multiply_by_nfe: true
+- name: methods.cocoa_mc_masked_nll_trace
+  cfg:
+    inf_method: MCMaskedNLL
+    similarity_metric: deberta_entail
+    last_block_only: true
+    progress_score: true
+- name: methods.cocoa_mc_masked_nll_trace
+  cfg:
+    inf_method: MCMaskedNLL
+    similarity_metric: deberta_entail
+    last_block_only: true
+    progress_score: true
+    multiply_by_nfe: true
+- name: methods.cocoa_mc_masked_nll_trace
+  cfg:
+    inf_method: MCMaskedNormalizedNLL
+    similarity_metric: deberta_entail
+    last_block_only: true
+    progress_score: true
+- name: methods.cocoa_mc_masked_nll_trace
+  cfg:
+    inf_method: MCMaskedNormalizedNLL
+    similarity_metric: deberta_entail
+    last_block_only: true
+    progress_score: true
+    multiply_by_nfe: true
+- name: methods.cocoa_mc_masked_nll_trace
+  cfg:
+    inf_method: MCMaskedNLL
+    similarity_metric: deberta_entail
+    last_block_only: true
+    inverse_progress_score: true
+- name: methods.cocoa_mc_masked_nll_trace
+  cfg:
+    inf_method: MCMaskedNLL
+    similarity_metric: deberta_entail
+    last_block_only: true
+    inverse_progress_score: true
+    multiply_by_nfe: true
+- name: methods.cocoa_mc_masked_nll_trace
+  cfg:
+    inf_method: MCMaskedNormalizedNLL
+    similarity_metric: deberta_entail
+    last_block_only: true
+    inverse_progress_score: true
+- name: methods.cocoa_mc_masked_nll_trace
+  cfg:
+    inf_method: MCMaskedNormalizedNLL
+    similarity_metric: deberta_entail
+    last_block_only: true
+    inverse_progress_score: true
+    multiply_by_nfe: true
+- name: methods.cocoa_mc_masked_nll_trace
+  cfg:
+    inf_method: MCMaskedNLL
+    similarity_metric: deberta_entail
+- name: methods.cocoa_mc_masked_nll_trace
+  cfg:
+    inf_method: MCMaskedNLL
+    similarity_metric: deberta_entail
+    multiply_by_nfe: true
+- name: methods.cocoa_mc_masked_nll_trace
+  cfg:
+    inf_method: MCMaskedNormalizedNLL
+    similarity_metric: deberta_entail
+- name: methods.cocoa_mc_masked_nll_trace
+  cfg:
+    inf_method: MCMaskedNormalizedNLL
+    similarity_metric: deberta_entail
+    multiply_by_nfe: true
+- name: methods.cocoa_mc_masked_nll_trace
+  cfg:
+    inf_method: MCMaskedNLL
+    similarity_metric: deberta_entail
+    progress_score: true
+- name: methods.cocoa_mc_masked_nll_trace
+  cfg:
+    inf_method: MCMaskedNLL
+    similarity_metric: deberta_entail
+    progress_score: true
+    multiply_by_nfe: true
+- name: methods.cocoa_mc_masked_nll_trace
+  cfg:
+    inf_method: MCMaskedNormalizedNLL
+    similarity_metric: deberta_entail
+    progress_score: true
+- name: methods.cocoa_mc_masked_nll_trace
+  cfg:
+    inf_method: MCMaskedNormalizedNLL
+    similarity_metric: deberta_entail
+    progress_score: true
+    multiply_by_nfe: true
+- name: methods.cocoa_mc_masked_nll_trace
+  cfg:
+    inf_method: MCMaskedNLL
+    similarity_metric: deberta_entail
+    inverse_progress_score: true
+- name: methods.cocoa_mc_masked_nll_trace
+  cfg:
+    inf_method: MCMaskedNLL
+    similarity_metric: deberta_entail
+    inverse_progress_score: true
+    multiply_by_nfe: true
+- name: methods.cocoa_mc_masked_nll_trace
+  cfg:
+    inf_method: MCMaskedNormalizedNLL
+    similarity_metric: deberta_entail
+    inverse_progress_score: true
+- name: methods.cocoa_mc_masked_nll_trace
+  cfg:
+    inf_method: MCMaskedNormalizedNLL
+    similarity_metric: deberta_entail
+    inverse_progress_score: true
+    multiply_by_nfe: true
+- name: methods.cocoa_mc_masked_nll_trace
+  cfg:
+    inf_method: MCMaskedNLL
+    similarity_metric: deberta_contra
+    block_only: true
+    block_agg: avg
+- name: methods.cocoa_mc_masked_nll_trace
+  cfg:
+    inf_method: MCMaskedNLL
+    similarity_metric: deberta_contra
+    block_only: true
+    block_agg: avg
+    multiply_by_nfe: true
+- name: methods.cocoa_mc_masked_nll_trace
+  cfg:
+    inf_method: MCMaskedNormalizedNLL
+    similarity_metric: deberta_contra
+    block_only: true
+    block_agg: avg
+- name: methods.cocoa_mc_masked_nll_trace
+  cfg:
+    inf_method: MCMaskedNormalizedNLL
+    similarity_metric: deberta_contra
+    block_only: true
+    block_agg: avg
+    multiply_by_nfe: true
+- name: methods.cocoa_mc_masked_nll_trace
+  cfg:
+    inf_method: MCMaskedNLL
+    similarity_metric: deberta_contra
+    block_only: true
+    block_agg: avg
+    progress_score: true
+- name: methods.cocoa_mc_masked_nll_trace
+  cfg:
+    inf_method: MCMaskedNLL
+    similarity_metric: deberta_contra
+    block_only: true
+    block_agg: avg
+    progress_score: true
+    multiply_by_nfe: true
+- name: methods.cocoa_mc_masked_nll_trace
+  cfg:
+    inf_method: MCMaskedNormalizedNLL
+    similarity_metric: deberta_contra
+    block_only: true
+    block_agg: avg
+    progress_score: true
+- name: methods.cocoa_mc_masked_nll_trace
+  cfg:
+    inf_method: MCMaskedNormalizedNLL
+    similarity_metric: deberta_contra
+    block_only: true
+    block_agg: avg
+    progress_score: true
+    multiply_by_nfe: true
+- name: methods.cocoa_mc_masked_nll_trace
+  cfg:
+    inf_method: MCMaskedNLL
+    similarity_metric: deberta_contra
+    block_only: true
+    block_agg: avg
+    inverse_progress_score: true
+- name: methods.cocoa_mc_masked_nll_trace
+  cfg:
+    inf_method: MCMaskedNLL
+    similarity_metric: deberta_contra
+    block_only: true
+    block_agg: avg
+    inverse_progress_score: true
+    multiply_by_nfe: true
+- name: methods.cocoa_mc_masked_nll_trace
+  cfg:
+    inf_method: MCMaskedNormalizedNLL
+    similarity_metric: deberta_contra
+    block_only: true
+    block_agg: avg
+    inverse_progress_score: true
+- name: methods.cocoa_mc_masked_nll_trace
+  cfg:
+    inf_method: MCMaskedNormalizedNLL
+    similarity_metric: deberta_contra
+    block_only: true
+    block_agg: avg
+    inverse_progress_score: true
+    multiply_by_nfe: true
+- name: methods.cocoa_mc_masked_nll_trace
+  cfg:
+    inf_method: MCMaskedNLL
+    similarity_metric: deberta_contra
+    block_only: true
+    block_agg: max
+- name: methods.cocoa_mc_masked_nll_trace
+  cfg:
+    inf_method: MCMaskedNLL
+    similarity_metric: deberta_contra
+    block_only: true
+    block_agg: max
+    multiply_by_nfe: true
+- name: methods.cocoa_mc_masked_nll_trace
+  cfg:
+    inf_method: MCMaskedNormalizedNLL
+    similarity_metric: deberta_contra
+    block_only: true
+    block_agg: max
+- name: methods.cocoa_mc_masked_nll_trace
+  cfg:
+    inf_method: MCMaskedNormalizedNLL
+    similarity_metric: deberta_contra
+    block_only: true
+    block_agg: max
+    multiply_by_nfe: true
+- name: methods.cocoa_mc_masked_nll_trace
+  cfg:
+    inf_method: MCMaskedNLL
+    similarity_metric: deberta_contra
+    block_only: true
+    block_agg: max
+    progress_score: true
+- name: methods.cocoa_mc_masked_nll_trace
+  cfg:
+    inf_method: MCMaskedNLL
+    similarity_metric: deberta_contra
+    block_only: true
+    block_agg: max
+    progress_score: true
+    multiply_by_nfe: true
+- name: methods.cocoa_mc_masked_nll_trace
+  cfg:
+    inf_method: MCMaskedNormalizedNLL
+    similarity_metric: deberta_contra
+    block_only: true
+    block_agg: max
+    progress_score: true
+- name: methods.cocoa_mc_masked_nll_trace
+  cfg:
+    inf_method: MCMaskedNormalizedNLL
+    similarity_metric: deberta_contra
+    block_only: true
+    block_agg: max
+    progress_score: true
+    multiply_by_nfe: true
+- name: methods.cocoa_mc_masked_nll_trace
+  cfg:
+    inf_method: MCMaskedNLL
+    similarity_metric: deberta_contra
+    block_only: true
+    block_agg: max
+    inverse_progress_score: true
+- name: methods.cocoa_mc_masked_nll_trace
+  cfg:
+    inf_method: MCMaskedNLL
+    similarity_metric: deberta_contra
+    block_only: true
+    block_agg: max
+    inverse_progress_score: true
+    multiply_by_nfe: true
+- name: methods.cocoa_mc_masked_nll_trace
+  cfg:
+    inf_method: MCMaskedNormalizedNLL
+    similarity_metric: deberta_contra
+    block_only: true
+    block_agg: max
+    inverse_progress_score: true
+- name: methods.cocoa_mc_masked_nll_trace
+  cfg:
+    inf_method: MCMaskedNormalizedNLL
+    similarity_metric: deberta_contra
+    block_only: true
+    block_agg: max
+    inverse_progress_score: true
+    multiply_by_nfe: true
+- name: methods.cocoa_mc_masked_nll_trace
+  cfg:
+    inf_method: MCMaskedNLL
+    similarity_metric: deberta_contra
+    last_block_only: true
+- name: methods.cocoa_mc_masked_nll_trace
+  cfg:
+    inf_method: MCMaskedNLL
+    similarity_metric: deberta_contra
+    last_block_only: true
+    multiply_by_nfe: true
+- name: methods.cocoa_mc_masked_nll_trace
+  cfg:
+    inf_method: MCMaskedNormalizedNLL
+    similarity_metric: deberta_contra
+    last_block_only: true
+- name: methods.cocoa_mc_masked_nll_trace
+  cfg:
+    inf_method: MCMaskedNormalizedNLL
+    similarity_metric: deberta_contra
+    last_block_only: true
+    multiply_by_nfe: true
+- name: methods.cocoa_mc_masked_nll_trace
+  cfg:
+    inf_method: MCMaskedNLL
+    similarity_metric: deberta_contra
+    last_block_only: true
+    progress_score: true
+- name: methods.cocoa_mc_masked_nll_trace
+  cfg:
+    inf_method: MCMaskedNLL
+    similarity_metric: deberta_contra
+    last_block_only: true
+    progress_score: true
+    multiply_by_nfe: true
+- name: methods.cocoa_mc_masked_nll_trace
+  cfg:
+    inf_method: MCMaskedNormalizedNLL
+    similarity_metric: deberta_contra
+    last_block_only: true
+    progress_score: true
+- name: methods.cocoa_mc_masked_nll_trace
+  cfg:
+    inf_method: MCMaskedNormalizedNLL
+    similarity_metric: deberta_contra
+    last_block_only: true
+    progress_score: true
+    multiply_by_nfe: true
+- name: methods.cocoa_mc_masked_nll_trace
+  cfg:
+    inf_method: MCMaskedNLL
+    similarity_metric: deberta_contra
+    last_block_only: true
+    inverse_progress_score: true
+- name: methods.cocoa_mc_masked_nll_trace
+  cfg:
+    inf_method: MCMaskedNLL
+    similarity_metric: deberta_contra
+    last_block_only: true
+    inverse_progress_score: true
+    multiply_by_nfe: true
+- name: methods.cocoa_mc_masked_nll_trace
+  cfg:
+    inf_method: MCMaskedNormalizedNLL
+    similarity_metric: deberta_contra
+    last_block_only: true
+    inverse_progress_score: true
+- name: methods.cocoa_mc_masked_nll_trace
+  cfg:
+    inf_method: MCMaskedNormalizedNLL
+    similarity_metric: deberta_contra
+    last_block_only: true
+    inverse_progress_score: true
+    multiply_by_nfe: true
+- name: methods.cocoa_mc_masked_nll_trace
+  cfg:
+    inf_method: MCMaskedNLL
+    similarity_metric: deberta_contra
+- name: methods.cocoa_mc_masked_nll_trace
+  cfg:
+    inf_method: MCMaskedNLL
+    similarity_metric: deberta_contra
+    multiply_by_nfe: true
+- name: methods.cocoa_mc_masked_nll_trace
+  cfg:
+    inf_method: MCMaskedNormalizedNLL
+    similarity_metric: deberta_contra
+- name: methods.cocoa_mc_masked_nll_trace
+  cfg:
+    inf_method: MCMaskedNormalizedNLL
+    similarity_metric: deberta_contra
+    multiply_by_nfe: true
+- name: methods.cocoa_mc_masked_nll_trace
+  cfg:
+    inf_method: MCMaskedNLL
+    similarity_metric: deberta_contra
+    progress_score: true
+- name: methods.cocoa_mc_masked_nll_trace
+  cfg:
+    inf_method: MCMaskedNLL
+    similarity_metric: deberta_contra
+    progress_score: true
+    multiply_by_nfe: true
+- name: methods.cocoa_mc_masked_nll_trace
+  cfg:
+    inf_method: MCMaskedNormalizedNLL
+    similarity_metric: deberta_contra
+    progress_score: true
+- name: methods.cocoa_mc_masked_nll_trace
+  cfg:
+    inf_method: MCMaskedNormalizedNLL
+    similarity_metric: deberta_contra
+    progress_score: true
+    multiply_by_nfe: true
+- name: methods.cocoa_mc_masked_nll_trace
+  cfg:
+    inf_method: MCMaskedNLL
+    similarity_metric: deberta_contra
+    inverse_progress_score: true
+- name: methods.cocoa_mc_masked_nll_trace
+  cfg:
+    inf_method: MCMaskedNLL
+    similarity_metric: deberta_contra
+    inverse_progress_score: true
+    multiply_by_nfe: true
+- name: methods.cocoa_mc_masked_nll_trace
+  cfg:
+    inf_method: MCMaskedNormalizedNLL
+    similarity_metric: deberta_contra
+    inverse_progress_score: true
+- name: methods.cocoa_mc_masked_nll_trace
+  cfg:
+    inf_method: MCMaskedNormalizedNLL
+    similarity_metric: deberta_contra
+    inverse_progress_score: true
+    multiply_by_nfe: true
+- name: methods.cocoa_mc_masked_nll_trace
+  cfg:
+    inf_method: NFE
+    similarity_metric: deberta_entail
+- name: methods.cocoa_mc_masked_nll_trace
+  cfg:
+    inf_method: NFE
+    similarity_metric: deberta_entail
+    progress_score: true
+- name: methods.cocoa_mc_masked_nll_trace
+  cfg:
+    inf_method: NFE
+    similarity_metric: deberta_entail
+    inverse_progress_score: true
+- name: methods.cocoa_mc_masked_nll_trace
+  cfg:
+    inf_method: NFE
+    similarity_metric: deberta_entail
+    full_trace: true
+- name: methods.cocoa_mc_masked_nll_trace
+  cfg:
+    inf_method: NFE
+    similarity_metric: deberta_entail
+    full_trace: true
+    progress_score: true
+- name: methods.cocoa_mc_masked_nll_trace
+  cfg:
+    inf_method: NFE
+    similarity_metric: deberta_entail
+    full_trace: true
+    inverse_progress_score: true
+- name: methods.cocoa_mc_masked_nll_trace
+  cfg:
+    inf_method: NFE
+    similarity_metric: deberta_entail
+    last_block_only: true
+- name: methods.cocoa_mc_masked_nll_trace
+  cfg:
+    inf_method: NFE
+    similarity_metric: deberta_entail
+    last_block_only: true
+    progress_score: true
+- name: methods.cocoa_mc_masked_nll_trace
+  cfg:
+    inf_method: NFE
+    similarity_metric: deberta_entail
+    last_block_only: true
+    inverse_progress_score: true
+- name: methods.cocoa_mc_masked_nll_trace
+  cfg:
+    inf_method: NFE
+    similarity_metric: deberta_entail
+    block_only: true
+    block_agg: avg
+- name: methods.cocoa_mc_masked_nll_trace
+  cfg:
+    inf_method: NFE
+    similarity_metric: deberta_entail
+    block_only: true
+    block_agg: avg
+    progress_score: true
+- name: methods.cocoa_mc_masked_nll_trace
+  cfg:
+    inf_method: NFE
+    similarity_metric: deberta_entail
+    block_only: true
+    block_agg: avg
+    inverse_progress_score: true
+- name: methods.cocoa_mc_masked_nll_trace
+  cfg:
+    inf_method: NFE
+    similarity_metric: deberta_entail
+    block_only: true
+    block_agg: max
+- name: methods.cocoa_mc_masked_nll_trace
+  cfg:
+    inf_method: NFE
+    similarity_metric: deberta_entail
+    block_only: true
+    block_agg: max
+    progress_score: true
+- name: methods.cocoa_mc_masked_nll_trace
+  cfg:
+    inf_method: NFE
+    similarity_metric: deberta_entail
+    block_only: true
+    block_agg: max
+    inverse_progress_score: true
+- name: methods.cocoa_mc_masked_nll_trace
+  cfg:
+    inf_method: NFE
+    similarity_metric: deberta_contra
+- name: methods.cocoa_mc_masked_nll_trace
+  cfg:
+    inf_method: NFE
+    similarity_metric: deberta_contra
+    progress_score: true
+- name: methods.cocoa_mc_masked_nll_trace
+  cfg:
+    inf_method: NFE
+    similarity_metric: deberta_contra
+    inverse_progress_score: true
+- name: methods.cocoa_mc_masked_nll_trace
+  cfg:
+    inf_method: NFE
+    similarity_metric: deberta_contra
+    full_trace: true
+- name: methods.cocoa_mc_masked_nll_trace
+  cfg:
+    inf_method: NFE
+    similarity_metric: deberta_contra
+    full_trace: true
+    progress_score: true
+- name: methods.cocoa_mc_masked_nll_trace
+  cfg:
+    inf_method: NFE
+    similarity_metric: deberta_contra
+    full_trace: true
+    inverse_progress_score: true
+- name: methods.cocoa_mc_masked_nll_trace
+  cfg:
+    inf_method: NFE
+    similarity_metric: deberta_contra
+    last_block_only: true
+- name: methods.cocoa_mc_masked_nll_trace
+  cfg:
+    inf_method: NFE
+    similarity_metric: deberta_contra
+    last_block_only: true
+    progress_score: true
+- name: methods.cocoa_mc_masked_nll_trace
+  cfg:
+    inf_method: NFE
+    similarity_metric: deberta_contra
+    last_block_only: true
+    inverse_progress_score: true
+- name: methods.cocoa_mc_masked_nll_trace
+  cfg:
+    inf_method: NFE
+    similarity_metric: deberta_contra
+    block_only: true
+    block_agg: avg
+- name: methods.cocoa_mc_masked_nll_trace
+  cfg:
+    inf_method: NFE
+    similarity_metric: deberta_contra
+    block_only: true
+    block_agg: avg
+    progress_score: true
+- name: methods.cocoa_mc_masked_nll_trace
+  cfg:
+    inf_method: NFE
+    similarity_metric: deberta_contra
+    block_only: true
+    block_agg: avg
+    inverse_progress_score: true
+- name: methods.cocoa_mc_masked_nll_trace
+  cfg:
+    inf_method: NFE
+    similarity_metric: deberta_contra
+    block_only: true
+    block_agg: max
+- name: methods.cocoa_mc_masked_nll_trace
+  cfg:
+    inf_method: NFE
+    similarity_metric: deberta_contra
+    block_only: true
+    block_agg: max
+    progress_score: true
+- name: methods.cocoa_mc_masked_nll_trace
+  cfg:
+    inf_method: NFE
+    similarity_metric: deberta_contra
+    block_only: true
+    block_agg: max
+    inverse_progress_score: true
+- name: methods.cocoa_mc_masked_nll_trace
+  cfg:
+    inf_method: NFE
+    full_trace: true
+- name: methods.cocoa_mc_masked_nll_trace
+  cfg:
+    inf_method: NFE
+    full_trace: true
+    progress_score: true
+- name: methods.cocoa_mc_masked_nll_trace
+  cfg:
+    inf_method: NFE
+    full_trace: true
+    inverse_progress_score: true
+- name: methods.cocoa_mc_masked_nll_trace
+  cfg:
+    inf_method: NFE
+    last_block_only: true
+- name: methods.cocoa_mc_masked_nll_trace
+  cfg:
+    inf_method: NFE
+    last_block_only: true
+    progress_score: true
+- name: methods.cocoa_mc_masked_nll_trace
+  cfg:
+    inf_method: NFE
+    last_block_only: true
+    inverse_progress_score: true
+- name: methods.cocoa_mc_masked_nll_trace
+  cfg:
+    inf_method: NFE
+    block_only: true
+    block_agg: avg
+- name: methods.cocoa_mc_masked_nll_trace
+  cfg:
+    inf_method: NFE
+    block_only: true
+    block_agg: avg
+    progress_score: true
+- name: methods.cocoa_mc_masked_nll_trace
+  cfg:
+    inf_method: NFE
+    block_only: true
+    block_agg: avg
+    inverse_progress_score: true
+- name: methods.cocoa_mc_masked_nll_trace
+  cfg:
+    inf_method: NFE
+    block_only: true
+    block_agg: max
+- name: methods.cocoa_mc_masked_nll_trace
+  cfg:
+    inf_method: NFE
+    block_only: true
+    block_agg: max
+    progress_score: true
+- name: methods.cocoa_mc_masked_nll_trace
+  cfg:
+    inf_method: NFE
+    block_only: true
+    block_agg: max
+    inverse_progress_score: true
+- name: methods.avg_dissimilarity_trace
+  cfg:
+    similarity_metric: deberta_entail
+    block_only: true
+    block_agg: avg
+- name: methods.avg_dissimilarity_trace
+  cfg:
+    similarity_metric: deberta_entail
+    block_only: true
+    block_agg: avg
+    progress_score: true
+- name: methods.avg_dissimilarity_trace
+  cfg:
+    similarity_metric: deberta_entail
+    block_only: true
+    block_agg: avg
+    inverse_progress_score: true
+- name: methods.avg_dissimilarity_trace
+  cfg:
+    similarity_metric: deberta_entail
+    block_only: true
+    block_agg: max
+- name: methods.avg_dissimilarity_trace
+  cfg:
+    similarity_metric: deberta_entail
+    block_only: true
+    block_agg: max
+    progress_score: true
+- name: methods.avg_dissimilarity_trace
+  cfg:
+    similarity_metric: deberta_entail
+    block_only: true
+    block_agg: max
+    inverse_progress_score: true
+- name: methods.avg_dissimilarity_trace
+  cfg:
+    similarity_metric: deberta_entail
+    last_block_only: true
+- name: methods.avg_dissimilarity_trace
+  cfg:
+    similarity_metric: deberta_entail
+    last_block_only: true
+    progress_score: true
+- name: methods.avg_dissimilarity_trace
+  cfg:
+    similarity_metric: deberta_entail
+    last_block_only: true
+    inverse_progress_score: true
+- name: methods.avg_dissimilarity_trace
+  cfg:
+    similarity_metric: deberta_entail
+- name: methods.avg_dissimilarity_trace
+  cfg:
+    similarity_metric: deberta_entail
+    progress_score: true
+- name: methods.avg_dissimilarity_trace
+  cfg:
+    similarity_metric: deberta_entail
+    inverse_progress_score: true
+- name: methods.avg_dissimilarity_trace
+  cfg:
+    similarity_metric: deberta_contra
+    block_only: true
+    block_agg: avg
+- name: methods.avg_dissimilarity_trace
+  cfg:
+    similarity_metric: deberta_contra
+    block_only: true
+    block_agg: avg
+    progress_score: true
+- name: methods.avg_dissimilarity_trace
+  cfg:
+    similarity_metric: deberta_contra
+    block_only: true
+    block_agg: avg
+    inverse_progress_score: true
+- name: methods.avg_dissimilarity_trace
+  cfg:
+    similarity_metric: deberta_contra
+    block_only: true
+    block_agg: max
+- name: methods.avg_dissimilarity_trace
+  cfg:
+    similarity_metric: deberta_contra
+    block_only: true
+    block_agg: max
+    progress_score: true
+- name: methods.avg_dissimilarity_trace
+  cfg:
+    similarity_metric: deberta_contra
+    block_only: true
+    block_agg: max
+    inverse_progress_score: true
+- name: methods.avg_dissimilarity_trace
+  cfg:
+    similarity_metric: deberta_contra
+    last_block_only: true
+- name: methods.avg_dissimilarity_trace
+  cfg:
+    similarity_metric: deberta_contra
+    last_block_only: true
+    progress_score: true
+- name: methods.avg_dissimilarity_trace
+  cfg:
+    similarity_metric: deberta_contra
+    last_block_only: true
+    inverse_progress_score: true
+- name: methods.avg_dissimilarity_trace
+  cfg:
+    similarity_metric: deberta_contra
+- name: methods.avg_dissimilarity_trace
+  cfg:
+    similarity_metric: deberta_contra
+    progress_score: true
+- name: methods.avg_dissimilarity_trace
+  cfg:
+    similarity_metric: deberta_contra
+    inverse_progress_score: true
+- name: methods.num_sem_sets_trace
+- name: methods.luq_trace
+- name: methods.kernel_language_entropy_trace
+- name: methods.tracedet_timehalu
+  cfg:
+    num_epochs: 100
+    batch_size: 64
+    metric_thr: 0.3
+- name: methods.dynhd
+  cfg:
+    num_epochs: 50
+    pretrain_epochs: 20
+    batch_size: 64
+    lr: 3e-4
+    hidden_dim: 64
+    top_k: 5
+    metric_thr: 0.3
+    margin_quantile: 0.95
+    margin_beta: 0.1
+    grid_search: true
+    validation_fraction: 0.1765
+    refit_on_full: true
+    lr_stage1_grid:
+    - 0.0003
+    - 0.001
+    lr_stage2_grid:
+    - 0.0001
+    - 0.0003
+    - 0.001
+    weight_decay_stage1_grid:
+    - 0.0
+    - 0.01
+    - 0.05
+    weight_decay_stage2_grid:
+    - 0.0
+    - 0.0001
+    - 0.001
+    path_lambda_grid:
+    - 0.0
+    - 0.05
+    - 0.1
+    - 0.15
+    - 0.2
+    - 0.25
+    - 0.3
+    - 0.35
+    - 0.4
+    rebound_lambda_grid:
+    - 0.0
+    - 0.05
+    - 0.1
+    - 0.15
+    - 0.2
+    - 0.25
+    - 0.3
+    - 0.35
+    - 0.4
+    warmup_ratio_grid:
+    - 0.0
+    - 0.3
+- name: Verbalized2S
+  cfg:
+    confidence_prompt: "Provide the probability that your guess is correct. Give ONLY the probability, no other words or explanation.\n\nFor example:\n\nProbability: <the probability between 0.0 and 1.0 that your guess is correct, without any extra commentary whatsoever; just the probability!>"
+    confidence_regex: 'Probability: (\d+\.\d+)'
+- name: methods.monte_carlo_sequence_entropy_mc_masked_nll
+- name: methods.monte_carlo_normalized_sequence_entropy_mc_masked_nll
+- name: methods.sentence_sar_mc_masked_nli
+- name: methods.semantic_entropy_mc_masked_nll
+- name: methods.semantic_density_mc_masked_nll
+- name: methods.trace_nll_variance
+  cfg:
+    aggregation: avg
+- name: methods.trace_nll_variance
+  cfg:
+    aggregation: max
+- name: methods.argmax_flip_count
+  cfg:
+    aggregation: avg
+- name: methods.argmax_flip_count
+  cfg:
+    aggregation: max
+- name: methods.argmax_flip_count
+  cfg:
+    aggregation: sum
+- name: methods.confidence_slope
+  cfg:
+    aggregation: avg
+- name: methods.confidence_slope
+  cfg:
+    aggregation: min
+- name: methods.last_step_confidence
+  cfg:
+    aggregation: avg
+- name: methods.last_step_confidence
+  cfg:
+    aggregation: min
+- name: methods.top2_gap_trace
+  cfg:
+    aggregation: avg
+- name: methods.top2_gap_trace
+  cfg:
+    aggregation: min
+- name: methods.confidence_at_commitment
+  cfg:
+    aggregation: avg
+- name: methods.confidence_at_commitment
+  cfg:
+    aggregation: min
+- name: methods.mask_neighbor_ratio
+  cfg:
+    aggregation: avg
+- name: methods.mask_neighbor_ratio
+  cfg:
+    aggregation: max
+- name: methods.phase_transition_sharpness
+  cfg:
+    variant: jump
+    aggregation: avg
+- name: methods.phase_transition_sharpness
+  cfg:
+    variant: width
+    aggregation: avg
+- name: methods.phase_transition_sharpness
+  cfg:
+    variant: late_stability
+    aggregation: avg
+- name: methods.token_rank_stability
+  cfg:
+    variant: consistency
+    aggregation: avg
+- name: methods.token_rank_stability
+  cfg:
+    variant: first_appearance
+    aggregation: avg
+- name: methods.mcmc_diagnostics
+  cfg:
+    variant: split_rhat
+    aggregation: avg
+- name: methods.mcmc_diagnostics
+  cfg:
+    variant: ess
+    aggregation: avg
+- name: methods.confidence_curvature
+  cfg:
+    aggregation: avg
+- name: methods.confidence_curvature
+  cfg:
+    aggregation: max
+- name: methods.commitment_synchrony
+  cfg:
+    variant: entropy
+- name: methods.commitment_synchrony
+  cfg:
+    variant: peak_ratio
+- name: methods.commitment_synchrony
+  cfg:
+    variant: gini
+- name: methods.block_uncertainty_variance
+  cfg:
+    variant: logprob
+    aggregation: var
+- name: methods.block_uncertainty_variance
+  cfg:
+    variant: entropy
+    aggregation: var
+- name: methods.position_confidence_correlation
+  cfg:
+    variant: spearman
+- name: methods.position_confidence_correlation
+  cfg:
+    variant: pearson
+- name: methods.cocoa_mc_masked_nll_trace
+  cfg:
+    inf_method: TraceProbs
+- name: methods.cocoa_mc_masked_nll_trace
+  cfg:
+    inf_method: TraceEntropy
+- name: methods.cocoa_mc_masked_nll_trace
+  cfg:
+    inf_method: TraceProbs
+    progress_score: true
+- name: methods.cocoa_mc_masked_nll_trace
+  cfg:
+    inf_method: TraceEntropy
+    progress_score: true
+- name: methods.cocoa_mc_masked_nll_trace
+  cfg:
+    inf_method: TraceProbs
+    multiply_by_nfe: true
+- name: methods.cocoa_mc_masked_nll_trace
+  cfg:
+    inf_method: TraceEntropy
+    multiply_by_nfe: true
+- name: methods.cocoa_mc_masked_nll_trace
+  cfg:
+    inf_method: TraceProbs
+    multiply_by_nfe: true
+    progress_score: true
+- name: methods.cocoa_mc_masked_nll_trace
+  cfg:
+    inf_method: TraceEntropy
+    multiply_by_nfe: true
+    progress_score: true
+- name: methods.cocoa_mc_masked_nll_trace
+  cfg:
+    full_trace: true
+    inf_method: TraceProbs
+- name: methods.cocoa_mc_masked_nll_trace
+  cfg:
+    full_trace: true
+    inf_method: TraceEntropy
+- name: methods.cocoa_mc_masked_nll_trace
+  cfg:
+    full_trace: true
+    inf_method: TraceProbs
+    progress_score: true
+- name: methods.cocoa_mc_masked_nll_trace
+  cfg:
+    full_trace: true
+    inf_method: TraceEntropy
+    progress_score: true
+- name: methods.cocoa_mc_masked_nll_trace
+  cfg:
+    inf_method: TraceProbs
+    last_block_only: true
+- name: methods.cocoa_mc_masked_nll_trace
+  cfg:
+    inf_method: TraceEntropy
+    last_block_only: true
+- name: methods.cocoa_mc_masked_nll_trace
+  cfg:
+    inf_method: TraceProbs
+    last_block_only: true
+    progress_score: true
+- name: methods.cocoa_mc_masked_nll_trace
+  cfg:
+    inf_method: TraceEntropy
+    last_block_only: true
+    progress_score: true
+- name: methods.cocoa_mc_masked_nll_trace
+  cfg:
+    full_trace: true
+    inf_method: TraceProbs
+    multiply_by_nfe: true
+- name: methods.cocoa_mc_masked_nll_trace
+  cfg:
+    full_trace: true
+    inf_method: TraceEntropy
+    multiply_by_nfe: true
+- name: methods.cocoa_mc_masked_nll_trace
+  cfg:
+    full_trace: true
+    inf_method: TraceProbs
+    multiply_by_nfe: true
+    progress_score: true
+- name: methods.cocoa_mc_masked_nll_trace
+  cfg:
+    full_trace: true
+    inf_method: TraceEntropy
+    multiply_by_nfe: true
+    progress_score: true
+- name: methods.cocoa_mc_masked_nll_trace
+  cfg:
+    inf_method: TraceProbs
+    last_block_only: true
+    multiply_by_nfe: true
+- name: methods.cocoa_mc_masked_nll_trace
+  cfg:
+    inf_method: TraceEntropy
+    last_block_only: true
+    multiply_by_nfe: true
+- name: methods.cocoa_mc_masked_nll_trace
+  cfg:
+    inf_method: TraceProbs
+    last_block_only: true
+    multiply_by_nfe: true
+    progress_score: true
+- name: methods.cocoa_mc_masked_nll_trace
+  cfg:
+    inf_method: TraceEntropy
+    last_block_only: true
+    multiply_by_nfe: true
+    progress_score: true
+- name: methods.cocoa_mc_masked_nll_trace
+  cfg:
+    inf_method: TraceProbs
+    inverse_progress_score: true
+- name: methods.cocoa_mc_masked_nll_trace
+  cfg:
+    inf_method: TraceEntropy
+    inverse_progress_score: true
+- name: methods.cocoa_mc_masked_nll_trace
+  cfg:
+    inf_method: TraceProbs
+    inverse_progress_score: true
+    multiply_by_nfe: true
+- name: methods.cocoa_mc_masked_nll_trace
+  cfg:
+    inf_method: TraceEntropy
+    inverse_progress_score: true
+    multiply_by_nfe: true
+- name: methods.cocoa_mc_masked_nll_trace
+  cfg:
+    full_trace: true
+    inf_method: TraceProbs
+    inverse_progress_score: true
+- name: methods.cocoa_mc_masked_nll_trace
+  cfg:
+    full_trace: true
+    inf_method: TraceEntropy
+    inverse_progress_score: true
+- name: methods.cocoa_mc_masked_nll_trace
+  cfg:
+    full_trace: true
+    inf_method: TraceProbs
+    inverse_progress_score: true
+    multiply_by_nfe: true
+- name: methods.cocoa_mc_masked_nll_trace
+  cfg:
+    full_trace: true
+    inf_method: TraceEntropy
+    inverse_progress_score: true
+    multiply_by_nfe: true
+- name: methods.cocoa_mc_masked_nll_trace
+  cfg:
+    inf_method: TraceProbs
+    inverse_progress_score: true
+    last_block_only: true
+- name: methods.cocoa_mc_masked_nll_trace
+  cfg:
+    inf_method: TraceEntropy
+    inverse_progress_score: true
+    last_block_only: true
+- name: methods.cocoa_mc_masked_nll_trace
+  cfg:
+    inf_method: TraceProbs
+    inverse_progress_score: true
+    last_block_only: true
+    multiply_by_nfe: true
+- name: methods.cocoa_mc_masked_nll_trace
+  cfg:
+    inf_method: TraceEntropy
+    inverse_progress_score: true
+    last_block_only: true
+    multiply_by_nfe: true
+- name: methods.cocoa_mc_masked_nll_trace
+  cfg:
+    block_agg: avg
+    block_only: true
+    inf_method: TraceProbs
+- name: methods.cocoa_mc_masked_nll_trace
+  cfg:
+    block_agg: avg
+    block_only: true
+    inf_method: TraceEntropy
+- name: methods.cocoa_mc_masked_nll_trace
+  cfg:
+    block_agg: avg
+    block_only: true
+    inf_method: TraceProbs
+    multiply_by_nfe: true
+- name: methods.cocoa_mc_masked_nll_trace
+  cfg:
+    block_agg: avg
+    block_only: true
+    inf_method: TraceEntropy
+    multiply_by_nfe: true
+- name: methods.cocoa_mc_masked_nll_trace
+  cfg:
+    block_agg: avg
+    block_only: true
+    inf_method: TraceProbs
+    progress_score: true
+- name: methods.cocoa_mc_masked_nll_trace
+  cfg:
+    block_agg: avg
+    block_only: true
+    inf_method: TraceEntropy
+    progress_score: true
+- name: methods.cocoa_mc_masked_nll_trace
+  cfg:
+    block_agg: avg
+    block_only: true
+    inf_method: TraceProbs
+    multiply_by_nfe: true
+    progress_score: true
+- name: methods.cocoa_mc_masked_nll_trace
+  cfg:
+    block_agg: avg
+    block_only: true
+    inf_method: TraceEntropy
+    multiply_by_nfe: true
+    progress_score: true
+- name: methods.cocoa_mc_masked_nll_trace
+  cfg:
+    block_agg: avg
+    block_only: true
+    inf_method: TraceProbs
+    inverse_progress_score: true
+- name: methods.cocoa_mc_masked_nll_trace
+  cfg:
+    block_agg: avg
+    block_only: true
+    inf_method: TraceEntropy
+    inverse_progress_score: true
+- name: methods.cocoa_mc_masked_nll_trace
+  cfg:
+    block_agg: avg
+    block_only: true
+    inf_method: TraceProbs
+    inverse_progress_score: true
+    multiply_by_nfe: true
+- name: methods.cocoa_mc_masked_nll_trace
+  cfg:
+    block_agg: avg
+    block_only: true
+    inf_method: TraceEntropy
+    inverse_progress_score: true
+    multiply_by_nfe: true
+- name: methods.cocoa_mc_masked_nll_trace
+  cfg:
+    block_agg: max
+    block_only: true
+    inf_method: TraceProbs
+- name: methods.cocoa_mc_masked_nll_trace
+  cfg:
+    block_agg: max
+    block_only: true
+    inf_method: TraceEntropy
+- name: methods.cocoa_mc_masked_nll_trace
+  cfg:
+    block_agg: max
+    block_only: true
+    inf_method: TraceProbs
+    multiply_by_nfe: true
+- name: methods.cocoa_mc_masked_nll_trace
+  cfg:
+    block_agg: max
+    block_only: true
+    inf_method: TraceEntropy
+    multiply_by_nfe: true
+- name: methods.cocoa_mc_masked_nll_trace
+  cfg:
+    block_agg: max
+    block_only: true
+    inf_method: TraceProbs
+    progress_score: true
+- name: methods.cocoa_mc_masked_nll_trace
+  cfg:
+    block_agg: max
+    block_only: true
+    inf_method: TraceEntropy
+    progress_score: true
+- name: methods.cocoa_mc_masked_nll_trace
+  cfg:
+    block_agg: max
+    block_only: true
+    inf_method: TraceProbs
+    multiply_by_nfe: true
+    progress_score: true
+- name: methods.cocoa_mc_masked_nll_trace
+  cfg:
+    block_agg: max
+    block_only: true
+    inf_method: TraceEntropy
+    multiply_by_nfe: true
+    progress_score: true
+- name: methods.cocoa_mc_masked_nll_trace
+  cfg:
+    block_agg: max
+    block_only: true
+    inf_method: TraceProbs
+    inverse_progress_score: true
+- name: methods.cocoa_mc_masked_nll_trace
+  cfg:
+    block_agg: max
+    block_only: true
+    inf_method: TraceEntropy
+    inverse_progress_score: true
+- name: methods.cocoa_mc_masked_nll_trace
+  cfg:
+    block_agg: max
+    block_only: true
+    inf_method: TraceProbs
+    inverse_progress_score: true
+    multiply_by_nfe: true
+- name: methods.cocoa_mc_masked_nll_trace
+  cfg:
+    block_agg: max
+    block_only: true
+    inf_method: TraceEntropy
+    inverse_progress_score: true
+    multiply_by_nfe: true
+- name: methods.cocoa_mc_masked_nll_trace
+  cfg:
+    full_trace: true
+    inf_method: TraceProbs
+    similarity_metric: deberta_entail
+- name: methods.cocoa_mc_masked_nll_trace
+  cfg:
+    full_trace: true
+    inf_method: TraceEntropy
+    similarity_metric: deberta_entail
+- name: methods.cocoa_mc_masked_nll_trace
+  cfg:
+    full_trace: true
+    inf_method: TraceProbs
+    multiply_by_nfe: true
+    similarity_metric: deberta_entail
+- name: methods.cocoa_mc_masked_nll_trace
+  cfg:
+    full_trace: true
+    inf_method: TraceEntropy
+    multiply_by_nfe: true
+    similarity_metric: deberta_entail
+- name: methods.cocoa_mc_masked_nll_trace
+  cfg:
+    full_trace: true
+    inf_method: TraceProbs
+    progress_score: true
+    similarity_metric: deberta_entail
+- name: methods.cocoa_mc_masked_nll_trace
+  cfg:
+    full_trace: true
+    inf_method: TraceEntropy
+    progress_score: true
+    similarity_metric: deberta_entail
+- name: methods.cocoa_mc_masked_nll_trace
+  cfg:
+    full_trace: true
+    inf_method: TraceProbs
+    multiply_by_nfe: true
+    progress_score: true
+    similarity_metric: deberta_entail
+- name: methods.cocoa_mc_masked_nll_trace
+  cfg:
+    full_trace: true
+    inf_method: TraceEntropy
+    multiply_by_nfe: true
+    progress_score: true
+    similarity_metric: deberta_entail
+- name: methods.cocoa_mc_masked_nll_trace
+  cfg:
+    full_trace: true
+    inf_method: TraceProbs
+    inverse_progress_score: true
+    similarity_metric: deberta_entail
+- name: methods.cocoa_mc_masked_nll_trace
+  cfg:
+    full_trace: true
+    inf_method: TraceEntropy
+    inverse_progress_score: true
+    similarity_metric: deberta_entail
+- name: methods.cocoa_mc_masked_nll_trace
+  cfg:
+    full_trace: true
+    inf_method: TraceProbs
+    inverse_progress_score: true
+    multiply_by_nfe: true
+    similarity_metric: deberta_entail
+- name: methods.cocoa_mc_masked_nll_trace
+  cfg:
+    full_trace: true
+    inf_method: TraceEntropy
+    inverse_progress_score: true
+    multiply_by_nfe: true
+    similarity_metric: deberta_entail
+- name: methods.cocoa_mc_masked_nll_trace
+  cfg:
+    full_trace: true
+    inf_method: TraceProbs
+    similarity_metric: deberta_contra
+- name: methods.cocoa_mc_masked_nll_trace
+  cfg:
+    full_trace: true
+    inf_method: TraceEntropy
+    similarity_metric: deberta_contra
+- name: methods.cocoa_mc_masked_nll_trace
+  cfg:
+    full_trace: true
+    inf_method: TraceProbs
+    multiply_by_nfe: true
+    similarity_metric: deberta_contra
+- name: methods.cocoa_mc_masked_nll_trace
+  cfg:
+    full_trace: true
+    inf_method: TraceEntropy
+    multiply_by_nfe: true
+    similarity_metric: deberta_contra
+- name: methods.cocoa_mc_masked_nll_trace
+  cfg:
+    full_trace: true
+    inf_method: TraceProbs
+    progress_score: true
+    similarity_metric: deberta_contra
+- name: methods.cocoa_mc_masked_nll_trace
+  cfg:
+    full_trace: true
+    inf_method: TraceEntropy
+    progress_score: true
+    similarity_metric: deberta_contra
+- name: methods.cocoa_mc_masked_nll_trace
+  cfg:
+    full_trace: true
+    inf_method: TraceProbs
+    multiply_by_nfe: true
+    progress_score: true
+    similarity_metric: deberta_contra
+- name: methods.cocoa_mc_masked_nll_trace
+  cfg:
+    full_trace: true
+    inf_method: TraceEntropy
+    multiply_by_nfe: true
+    progress_score: true
+    similarity_metric: deberta_contra
+- name: methods.cocoa_mc_masked_nll_trace
+  cfg:
+    full_trace: true
+    inf_method: TraceProbs
+    inverse_progress_score: true
+    similarity_metric: deberta_contra
+- name: methods.cocoa_mc_masked_nll_trace
+  cfg:
+    full_trace: true
+    inf_method: TraceEntropy
+    inverse_progress_score: true
+    similarity_metric: deberta_contra
+- name: methods.cocoa_mc_masked_nll_trace
+  cfg:
+    full_trace: true
+    inf_method: TraceProbs
+    inverse_progress_score: true
+    multiply_by_nfe: true
+    similarity_metric: deberta_contra
+- name: methods.cocoa_mc_masked_nll_trace
+  cfg:
+    full_trace: true
+    inf_method: TraceEntropy
+    inverse_progress_score: true
+    multiply_by_nfe: true
+    similarity_metric: deberta_contra
+- name: methods.cocoa_mc_masked_nll_trace
+  cfg:
+    block_agg: avg
+    block_only: true
+    inf_method: TraceProbs
+    similarity_metric: deberta_entail
+- name: methods.cocoa_mc_masked_nll_trace
+  cfg:
+    block_agg: avg
+    block_only: true
+    inf_method: TraceEntropy
+    similarity_metric: deberta_entail
+- name: methods.cocoa_mc_masked_nll_trace
+  cfg:
+    block_agg: avg
+    block_only: true
+    inf_method: TraceProbs
+    multiply_by_nfe: true
+    similarity_metric: deberta_entail
+- name: methods.cocoa_mc_masked_nll_trace
+  cfg:
+    block_agg: avg
+    block_only: true
+    inf_method: TraceEntropy
+    multiply_by_nfe: true
+    similarity_metric: deberta_entail
+- name: methods.cocoa_mc_masked_nll_trace
+  cfg:
+    block_agg: avg
+    block_only: true
+    inf_method: TraceProbs
+    progress_score: true
+    similarity_metric: deberta_entail
+- name: methods.cocoa_mc_masked_nll_trace
+  cfg:
+    block_agg: avg
+    block_only: true
+    inf_method: TraceEntropy
+    progress_score: true
+    similarity_metric: deberta_entail
+- name: methods.cocoa_mc_masked_nll_trace
+  cfg:
+    block_agg: avg
+    block_only: true
+    inf_method: TraceProbs
+    multiply_by_nfe: true
+    progress_score: true
+    similarity_metric: deberta_entail
+- name: methods.cocoa_mc_masked_nll_trace
+  cfg:
+    block_agg: avg
+    block_only: true
+    inf_method: TraceEntropy
+    multiply_by_nfe: true
+    progress_score: true
+    similarity_metric: deberta_entail
+- name: methods.cocoa_mc_masked_nll_trace
+  cfg:
+    block_agg: avg
+    block_only: true
+    inf_method: TraceProbs
+    inverse_progress_score: true
+    similarity_metric: deberta_entail
+- name: methods.cocoa_mc_masked_nll_trace
+  cfg:
+    block_agg: avg
+    block_only: true
+    inf_method: TraceEntropy
+    inverse_progress_score: true
+    similarity_metric: deberta_entail
+- name: methods.cocoa_mc_masked_nll_trace
+  cfg:
+    block_agg: avg
+    block_only: true
+    inf_method: TraceProbs
+    inverse_progress_score: true
+    multiply_by_nfe: true
+    similarity_metric: deberta_entail
+- name: methods.cocoa_mc_masked_nll_trace
+  cfg:
+    block_agg: avg
+    block_only: true
+    inf_method: TraceEntropy
+    inverse_progress_score: true
+    multiply_by_nfe: true
+    similarity_metric: deberta_entail
+- name: methods.cocoa_mc_masked_nll_trace
+  cfg:
+    block_agg: max
+    block_only: true
+    inf_method: TraceProbs
+    similarity_metric: deberta_entail
+- name: methods.cocoa_mc_masked_nll_trace
+  cfg:
+    block_agg: max
+    block_only: true
+    inf_method: TraceEntropy
+    similarity_metric: deberta_entail
+- name: methods.cocoa_mc_masked_nll_trace
+  cfg:
+    block_agg: max
+    block_only: true
+    inf_method: TraceProbs
+    multiply_by_nfe: true
+    similarity_metric: deberta_entail
+- name: methods.cocoa_mc_masked_nll_trace
+  cfg:
+    block_agg: max
+    block_only: true
+    inf_method: TraceEntropy
+    multiply_by_nfe: true
+    similarity_metric: deberta_entail
+- name: methods.cocoa_mc_masked_nll_trace
+  cfg:
+    block_agg: max
+    block_only: true
+    inf_method: TraceProbs
+    progress_score: true
+    similarity_metric: deberta_entail
+- name: methods.cocoa_mc_masked_nll_trace
+  cfg:
+    block_agg: max
+    block_only: true
+    inf_method: TraceEntropy
+    progress_score: true
+    similarity_metric: deberta_entail
+- name: methods.cocoa_mc_masked_nll_trace
+  cfg:
+    block_agg: max
+    block_only: true
+    inf_method: TraceProbs
+    multiply_by_nfe: true
+    progress_score: true
+    similarity_metric: deberta_entail
+- name: methods.cocoa_mc_masked_nll_trace
+  cfg:
+    block_agg: max
+    block_only: true
+    inf_method: TraceEntropy
+    multiply_by_nfe: true
+    progress_score: true
+    similarity_metric: deberta_entail
+- name: methods.cocoa_mc_masked_nll_trace
+  cfg:
+    block_agg: max
+    block_only: true
+    inf_method: TraceProbs
+    inverse_progress_score: true
+    similarity_metric: deberta_entail
+- name: methods.cocoa_mc_masked_nll_trace
+  cfg:
+    block_agg: max
+    block_only: true
+    inf_method: TraceEntropy
+    inverse_progress_score: true
+    similarity_metric: deberta_entail
+- name: methods.cocoa_mc_masked_nll_trace
+  cfg:
+    block_agg: max
+    block_only: true
+    inf_method: TraceProbs
+    inverse_progress_score: true
+    multiply_by_nfe: true
+    similarity_metric: deberta_entail
+- name: methods.cocoa_mc_masked_nll_trace
+  cfg:
+    block_agg: max
+    block_only: true
+    inf_method: TraceEntropy
+    inverse_progress_score: true
+    multiply_by_nfe: true
+    similarity_metric: deberta_entail
+- name: methods.cocoa_mc_masked_nll_trace
+  cfg:
+    inf_method: TraceProbs
+    last_block_only: true
+    similarity_metric: deberta_entail
+- name: methods.cocoa_mc_masked_nll_trace
+  cfg:
+    inf_method: TraceEntropy
+    last_block_only: true
+    similarity_metric: deberta_entail
+- name: methods.cocoa_mc_masked_nll_trace
+  cfg:
+    inf_method: TraceProbs
+    last_block_only: true
+    multiply_by_nfe: true
+    similarity_metric: deberta_entail
+- name: methods.cocoa_mc_masked_nll_trace
+  cfg:
+    inf_method: TraceEntropy
+    last_block_only: true
+    multiply_by_nfe: true
+    similarity_metric: deberta_entail
+- name: methods.cocoa_mc_masked_nll_trace
+  cfg:
+    inf_method: TraceProbs
+    last_block_only: true
+    progress_score: true
+    similarity_metric: deberta_entail
+- name: methods.cocoa_mc_masked_nll_trace
+  cfg:
+    inf_method: TraceEntropy
+    last_block_only: true
+    progress_score: true
+    similarity_metric: deberta_entail
+- name: methods.cocoa_mc_masked_nll_trace
+  cfg:
+    inf_method: TraceProbs
+    last_block_only: true
+    multiply_by_nfe: true
+    progress_score: true
+    similarity_metric: deberta_entail
+- name: methods.cocoa_mc_masked_nll_trace
+  cfg:
+    inf_method: TraceEntropy
+    last_block_only: true
+    multiply_by_nfe: true
+    progress_score: true
+    similarity_metric: deberta_entail
+- name: methods.cocoa_mc_masked_nll_trace
+  cfg:
+    inf_method: TraceProbs
+    inverse_progress_score: true
+    last_block_only: true
+    similarity_metric: deberta_entail
+- name: methods.cocoa_mc_masked_nll_trace
+  cfg:
+    inf_method: TraceEntropy
+    inverse_progress_score: true
+    last_block_only: true
+    similarity_metric: deberta_entail
+- name: methods.cocoa_mc_masked_nll_trace
+  cfg:
+    inf_method: TraceProbs
+    inverse_progress_score: true
+    last_block_only: true
+    multiply_by_nfe: true
+    similarity_metric: deberta_entail
+- name: methods.cocoa_mc_masked_nll_trace
+  cfg:
+    inf_method: TraceEntropy
+    inverse_progress_score: true
+    last_block_only: true
+    multiply_by_nfe: true
+    similarity_metric: deberta_entail
+- name: methods.cocoa_mc_masked_nll_trace
+  cfg:
+    inf_method: TraceProbs
+    similarity_metric: deberta_entail
+- name: methods.cocoa_mc_masked_nll_trace
+  cfg:
+    inf_method: TraceEntropy
+    similarity_metric: deberta_entail
+- name: methods.cocoa_mc_masked_nll_trace
+  cfg:
+    inf_method: TraceProbs
+    multiply_by_nfe: true
+    similarity_metric: deberta_entail
+- name: methods.cocoa_mc_masked_nll_trace
+  cfg:
+    inf_method: TraceEntropy
+    multiply_by_nfe: true
+    similarity_metric: deberta_entail
+- name: methods.cocoa_mc_masked_nll_trace
+  cfg:
+    inf_method: TraceProbs
+    progress_score: true
+    similarity_metric: deberta_entail
+- name: methods.cocoa_mc_masked_nll_trace
+  cfg:
+    inf_method: TraceEntropy
+    progress_score: true
+    similarity_metric: deberta_entail
+- name: methods.cocoa_mc_masked_nll_trace
+  cfg:
+    inf_method: TraceProbs
+    multiply_by_nfe: true
+    progress_score: true
+    similarity_metric: deberta_entail
+- name: methods.cocoa_mc_masked_nll_trace
+  cfg:
+    inf_method: TraceEntropy
+    multiply_by_nfe: true
+    progress_score: true
+    similarity_metric: deberta_entail
+- name: methods.cocoa_mc_masked_nll_trace
+  cfg:
+    inf_method: TraceProbs
+    inverse_progress_score: true
+    similarity_metric: deberta_entail
+- name: methods.cocoa_mc_masked_nll_trace
+  cfg:
+    inf_method: TraceEntropy
+    inverse_progress_score: true
+    similarity_metric: deberta_entail
+- name: methods.cocoa_mc_masked_nll_trace
+  cfg:
+    inf_method: TraceProbs
+    inverse_progress_score: true
+    multiply_by_nfe: true
+    similarity_metric: deberta_entail
+- name: methods.cocoa_mc_masked_nll_trace
+  cfg:
+    inf_method: TraceEntropy
+    inverse_progress_score: true
+    multiply_by_nfe: true
+    similarity_metric: deberta_entail
+- name: methods.cocoa_mc_masked_nll_trace
+  cfg:
+    block_agg: avg
+    block_only: true
+    inf_method: TraceProbs
+    similarity_metric: deberta_contra
+- name: methods.cocoa_mc_masked_nll_trace
+  cfg:
+    block_agg: avg
+    block_only: true
+    inf_method: TraceEntropy
+    similarity_metric: deberta_contra
+- name: methods.cocoa_mc_masked_nll_trace
+  cfg:
+    block_agg: avg
+    block_only: true
+    inf_method: TraceProbs
+    multiply_by_nfe: true
+    similarity_metric: deberta_contra
+- name: methods.cocoa_mc_masked_nll_trace
+  cfg:
+    block_agg: avg
+    block_only: true
+    inf_method: TraceEntropy
+    multiply_by_nfe: true
+    similarity_metric: deberta_contra
+- name: methods.cocoa_mc_masked_nll_trace
+  cfg:
+    block_agg: avg
+    block_only: true
+    inf_method: TraceProbs
+    progress_score: true
+    similarity_metric: deberta_contra
+- name: methods.cocoa_mc_masked_nll_trace
+  cfg:
+    block_agg: avg
+    block_only: true
+    inf_method: TraceEntropy
+    progress_score: true
+    similarity_metric: deberta_contra
+- name: methods.cocoa_mc_masked_nll_trace
+  cfg:
+    block_agg: avg
+    block_only: true
+    inf_method: TraceProbs
+    multiply_by_nfe: true
+    progress_score: true
+    similarity_metric: deberta_contra
+- name: methods.cocoa_mc_masked_nll_trace
+  cfg:
+    block_agg: avg
+    block_only: true
+    inf_method: TraceEntropy
+    multiply_by_nfe: true
+    progress_score: true
+    similarity_metric: deberta_contra
+- name: methods.cocoa_mc_masked_nll_trace
+  cfg:
+    block_agg: avg
+    block_only: true
+    inf_method: TraceProbs
+    inverse_progress_score: true
+    similarity_metric: deberta_contra
+- name: methods.cocoa_mc_masked_nll_trace
+  cfg:
+    block_agg: avg
+    block_only: true
+    inf_method: TraceEntropy
+    inverse_progress_score: true
+    similarity_metric: deberta_contra
+- name: methods.cocoa_mc_masked_nll_trace
+  cfg:
+    block_agg: avg
+    block_only: true
+    inf_method: TraceProbs
+    inverse_progress_score: true
+    multiply_by_nfe: true
+    similarity_metric: deberta_contra
+- name: methods.cocoa_mc_masked_nll_trace
+  cfg:
+    block_agg: avg
+    block_only: true
+    inf_method: TraceEntropy
+    inverse_progress_score: true
+    multiply_by_nfe: true
+    similarity_metric: deberta_contra
+- name: methods.cocoa_mc_masked_nll_trace
+  cfg:
+    block_agg: max
+    block_only: true
+    inf_method: TraceProbs
+    similarity_metric: deberta_contra
+- name: methods.cocoa_mc_masked_nll_trace
+  cfg:
+    block_agg: max
+    block_only: true
+    inf_method: TraceEntropy
+    similarity_metric: deberta_contra
+- name: methods.cocoa_mc_masked_nll_trace
+  cfg:
+    block_agg: max
+    block_only: true
+    inf_method: TraceProbs
+    multiply_by_nfe: true
+    similarity_metric: deberta_contra
+- name: methods.cocoa_mc_masked_nll_trace
+  cfg:
+    block_agg: max
+    block_only: true
+    inf_method: TraceEntropy
+    multiply_by_nfe: true
+    similarity_metric: deberta_contra
+- name: methods.cocoa_mc_masked_nll_trace
+  cfg:
+    block_agg: max
+    block_only: true
+    inf_method: TraceProbs
+    progress_score: true
+    similarity_metric: deberta_contra
+- name: methods.cocoa_mc_masked_nll_trace
+  cfg:
+    block_agg: max
+    block_only: true
+    inf_method: TraceEntropy
+    progress_score: true
+    similarity_metric: deberta_contra
+- name: methods.cocoa_mc_masked_nll_trace
+  cfg:
+    block_agg: max
+    block_only: true
+    inf_method: TraceProbs
+    multiply_by_nfe: true
+    progress_score: true
+    similarity_metric: deberta_contra
+- name: methods.cocoa_mc_masked_nll_trace
+  cfg:
+    block_agg: max
+    block_only: true
+    inf_method: TraceEntropy
+    multiply_by_nfe: true
+    progress_score: true
+    similarity_metric: deberta_contra
+- name: methods.cocoa_mc_masked_nll_trace
+  cfg:
+    block_agg: max
+    block_only: true
+    inf_method: TraceProbs
+    inverse_progress_score: true
+    similarity_metric: deberta_contra
+- name: methods.cocoa_mc_masked_nll_trace
+  cfg:
+    block_agg: max
+    block_only: true
+    inf_method: TraceEntropy
+    inverse_progress_score: true
+    similarity_metric: deberta_contra
+- name: methods.cocoa_mc_masked_nll_trace
+  cfg:
+    block_agg: max
+    block_only: true
+    inf_method: TraceProbs
+    inverse_progress_score: true
+    multiply_by_nfe: true
+    similarity_metric: deberta_contra
+- name: methods.cocoa_mc_masked_nll_trace
+  cfg:
+    block_agg: max
+    block_only: true
+    inf_method: TraceEntropy
+    inverse_progress_score: true
+    multiply_by_nfe: true
+    similarity_metric: deberta_contra
+- name: methods.cocoa_mc_masked_nll_trace
+  cfg:
+    inf_method: TraceProbs
+    last_block_only: true
+    similarity_metric: deberta_contra
+- name: methods.cocoa_mc_masked_nll_trace
+  cfg:
+    inf_method: TraceEntropy
+    last_block_only: true
+    similarity_metric: deberta_contra
+- name: methods.cocoa_mc_masked_nll_trace
+  cfg:
+    inf_method: TraceProbs
+    last_block_only: true
+    multiply_by_nfe: true
+    similarity_metric: deberta_contra
+- name: methods.cocoa_mc_masked_nll_trace
+  cfg:
+    inf_method: TraceEntropy
+    last_block_only: true
+    multiply_by_nfe: true
+    similarity_metric: deberta_contra
+- name: methods.cocoa_mc_masked_nll_trace
+  cfg:
+    inf_method: TraceProbs
+    last_block_only: true
+    progress_score: true
+    similarity_metric: deberta_contra
+- name: methods.cocoa_mc_masked_nll_trace
+  cfg:
+    inf_method: TraceEntropy
+    last_block_only: true
+    progress_score: true
+    similarity_metric: deberta_contra
+- name: methods.cocoa_mc_masked_nll_trace
+  cfg:
+    inf_method: TraceProbs
+    last_block_only: true
+    multiply_by_nfe: true
+    progress_score: true
+    similarity_metric: deberta_contra
+- name: methods.cocoa_mc_masked_nll_trace
+  cfg:
+    inf_method: TraceEntropy
+    last_block_only: true
+    multiply_by_nfe: true
+    progress_score: true
+    similarity_metric: deberta_contra
+- name: methods.cocoa_mc_masked_nll_trace
+  cfg:
+    inf_method: TraceProbs
+    inverse_progress_score: true
+    last_block_only: true
+    similarity_metric: deberta_contra
+- name: methods.cocoa_mc_masked_nll_trace
+  cfg:
+    inf_method: TraceEntropy
+    inverse_progress_score: true
+    last_block_only: true
+    similarity_metric: deberta_contra
+- name: methods.cocoa_mc_masked_nll_trace
+  cfg:
+    inf_method: TraceProbs
+    inverse_progress_score: true
+    last_block_only: true
+    multiply_by_nfe: true
+    similarity_metric: deberta_contra
+- name: methods.cocoa_mc_masked_nll_trace
+  cfg:
+    inf_method: TraceEntropy
+    inverse_progress_score: true
+    last_block_only: true
+    multiply_by_nfe: true
+    similarity_metric: deberta_contra
+- name: methods.cocoa_mc_masked_nll_trace
+  cfg:
+    inf_method: TraceProbs
+    similarity_metric: deberta_contra
+- name: methods.cocoa_mc_masked_nll_trace
+  cfg:
+    inf_method: TraceEntropy
+    similarity_metric: deberta_contra
+- name: methods.cocoa_mc_masked_nll_trace
+  cfg:
+    inf_method: TraceProbs
+    multiply_by_nfe: true
+    similarity_metric: deberta_contra
+- name: methods.cocoa_mc_masked_nll_trace
+  cfg:
+    inf_method: TraceEntropy
+    multiply_by_nfe: true
+    similarity_metric: deberta_contra
+- name: methods.cocoa_mc_masked_nll_trace
+  cfg:
+    inf_method: TraceProbs
+    progress_score: true
+    similarity_metric: deberta_contra
+- name: methods.cocoa_mc_masked_nll_trace
+  cfg:
+    inf_method: TraceEntropy
+    progress_score: true
+    similarity_metric: deberta_contra
+- name: methods.cocoa_mc_masked_nll_trace
+  cfg:
+    inf_method: TraceProbs
+    multiply_by_nfe: true
+    progress_score: true
+    similarity_metric: deberta_contra
+- name: methods.cocoa_mc_masked_nll_trace
+  cfg:
+    inf_method: TraceEntropy
+    multiply_by_nfe: true
+    progress_score: true
+    similarity_metric: deberta_contra
+- name: methods.cocoa_mc_masked_nll_trace
+  cfg:
+    inf_method: TraceProbs
+    inverse_progress_score: true
+    similarity_metric: deberta_contra
+- name: methods.cocoa_mc_masked_nll_trace
+  cfg:
+    inf_method: TraceEntropy
+    inverse_progress_score: true
+    similarity_metric: deberta_contra
+- name: methods.cocoa_mc_masked_nll_trace
+  cfg:
+    inf_method: TraceProbs
+    inverse_progress_score: true
+    multiply_by_nfe: true
+    similarity_metric: deberta_contra
+- name: methods.cocoa_mc_masked_nll_trace
+  cfg:
+    inf_method: TraceEntropy
+    inverse_progress_score: true
+    multiply_by_nfe: true
+    similarity_metric: deberta_contra
+- name: methods.cocoa_mc_masked_nll_trace
+  cfg:
+    inf_method: ConfidenceAtCommit
+    similarity_metric: cross_encoder
+- name: methods.cocoa_mc_masked_nll_trace
+  cfg:
+    inf_method: ConfidenceAtCommit
+    similarity_metric: cross_encoder
+    multiply_by_nfe: true
+- name: methods.cocoa_mc_masked_nll_trace
+  cfg:
+    inf_method: ConfidenceAtCommit
+    similarity_metric: cross_encoder
+    progress_score: true
+- name: methods.cocoa_mc_masked_nll_trace
+  cfg:
+    inf_method: ConfidenceAtCommit
+    similarity_metric: cross_encoder
+    progress_score: true
+    multiply_by_nfe: true
+- name: methods.cocoa_mc_masked_nll_trace
+  cfg:
+    inf_method: ConfidenceAtCommit
+    similarity_metric: cross_encoder
+    full_trace: true
+- name: methods.cocoa_mc_masked_nll_trace
+  cfg:
+    inf_method: ConfidenceAtCommit
+    similarity_metric: cross_encoder
+    full_trace: true
+    multiply_by_nfe: true
+- name: methods.cocoa_mc_masked_nll_trace
+  cfg:
+    inf_method: ConfidenceAtCommit
+    similarity_metric: cross_encoder
+    full_trace: true
+    progress_score: true
+- name: methods.cocoa_mc_masked_nll_trace
+  cfg:
+    inf_method: ConfidenceAtCommit
+    similarity_metric: cross_encoder
+    full_trace: true
+    progress_score: true
+    multiply_by_nfe: true
+- name: methods.cocoa_mc_masked_nll_trace
+  cfg:
+    inf_method: ConfidenceAtCommit
+    similarity_metric: cross_encoder
+    last_block_only: true
+- name: methods.cocoa_mc_masked_nll_trace
+  cfg:
+    inf_method: ConfidenceAtCommit
+    similarity_metric: cross_encoder
+    last_block_only: true
+    multiply_by_nfe: true
+- name: methods.cocoa_mc_masked_nll_trace
+  cfg:
+    inf_method: ConfidenceAtCommit
+    similarity_metric: cross_encoder
+    last_block_only: true
+    progress_score: true
+- name: methods.cocoa_mc_masked_nll_trace
+  cfg:
+    inf_method: ConfidenceAtCommit
+    similarity_metric: cross_encoder
+    last_block_only: true
+    progress_score: true
+    multiply_by_nfe: true
+- name: methods.cocoa_mc_masked_nll_trace
+  cfg:
+    inf_method: ConfidenceAtCommit
+    similarity_metric: cross_encoder
+    block_only: true
+    block_agg: avg
+- name: methods.cocoa_mc_masked_nll_trace
+  cfg:
+    inf_method: ConfidenceAtCommit
+    similarity_metric: cross_encoder
+    block_only: true
+    block_agg: avg
+    multiply_by_nfe: true
+- name: methods.cocoa_mc_masked_nll_trace
+  cfg:
+    inf_method: ConfidenceAtCommit
+    similarity_metric: cross_encoder
+    block_only: true
+    block_agg: avg
+    progress_score: true
+- name: methods.cocoa_mc_masked_nll_trace
+  cfg:
+    inf_method: ConfidenceAtCommit
+    similarity_metric: cross_encoder
+    block_only: true
+    block_agg: avg
+    progress_score: true
+    multiply_by_nfe: true
+- name: methods.cocoa_mc_masked_nll_trace
+  cfg:
+    inf_method: ConfidenceAtCommit
+    similarity_metric: deberta_entail
+- name: methods.cocoa_mc_masked_nll_trace
+  cfg:
+    inf_method: ConfidenceAtCommit
+    similarity_metric: deberta_entail
+    multiply_by_nfe: true
+- name: methods.cocoa_mc_masked_nll_trace
+  cfg:
+    inf_method: ConfidenceAtCommit
+    similarity_metric: deberta_entail
+    progress_score: true
+- name: methods.cocoa_mc_masked_nll_trace
+  cfg:
+    inf_method: ConfidenceAtCommit
+    similarity_metric: deberta_entail
+    progress_score: true
+    multiply_by_nfe: true
+- name: methods.cocoa_mc_masked_nll_trace
+  cfg:
+    inf_method: ConfidenceAtCommit
+    similarity_metric: deberta_entail
+    full_trace: true
+- name: methods.cocoa_mc_masked_nll_trace
+  cfg:
+    inf_method: ConfidenceAtCommit
+    similarity_metric: deberta_entail
+    full_trace: true
+    multiply_by_nfe: true
+- name: methods.cocoa_mc_masked_nll_trace
+  cfg:
+    inf_method: ConfidenceAtCommit
+    similarity_metric: deberta_entail
+    full_trace: true
+    progress_score: true
+- name: methods.cocoa_mc_masked_nll_trace
+  cfg:
+    inf_method: ConfidenceAtCommit
+    similarity_metric: deberta_entail
+    full_trace: true
+    progress_score: true
+    multiply_by_nfe: true
+- name: methods.cocoa_mc_masked_nll_trace
+  cfg:
+    inf_method: ConfidenceAtCommit
+    similarity_metric: deberta_entail
+    last_block_only: true
+- name: methods.cocoa_mc_masked_nll_trace
+  cfg:
+    inf_method: ConfidenceAtCommit
+    similarity_metric: deberta_entail
+    last_block_only: true
+    multiply_by_nfe: true
+- name: methods.cocoa_mc_masked_nll_trace
+  cfg:
+    inf_method: ConfidenceAtCommit
+    similarity_metric: deberta_entail
+    last_block_only: true
+    progress_score: true
+- name: methods.cocoa_mc_masked_nll_trace
+  cfg:
+    inf_method: ConfidenceAtCommit
+    similarity_metric: deberta_entail
+    last_block_only: true
+    progress_score: true
+    multiply_by_nfe: true
+- name: methods.cocoa_mc_masked_nll_trace
+  cfg:
+    inf_method: ConfidenceAtCommit
+    similarity_metric: deberta_entail
+    block_only: true
+    block_agg: avg
+- name: methods.cocoa_mc_masked_nll_trace
+  cfg:
+    inf_method: ConfidenceAtCommit
+    similarity_metric: deberta_entail
+    block_only: true
+    block_agg: avg
+    multiply_by_nfe: true
+- name: methods.cocoa_mc_masked_nll_trace
+  cfg:
+    inf_method: ConfidenceAtCommit
+    similarity_metric: deberta_entail
+    block_only: true
+    block_agg: avg
+    progress_score: true
+- name: methods.cocoa_mc_masked_nll_trace
+  cfg:
+    inf_method: ConfidenceAtCommit
+    similarity_metric: deberta_entail
+    block_only: true
+    block_agg: avg
+    progress_score: true
+    multiply_by_nfe: true
+- name: methods.cocoa_mc_masked_nll
+- name: methods.cocoa_mc_masked_normalized_nll
+- name: methods.d_cocoa_hybrid
+  cfg:
+    alpha: 0.5
+    k: 1
+    inf_method: ConfidenceAtCommit
+    block_only: true
+    block_agg: avg
+- name: methods.d_cocoa_hybrid
+  cfg:
+    alpha: 0.5
+    k: 2
+    inf_method: ConfidenceAtCommit
+    block_only: true
+    block_agg: avg
+- name: methods.d_cocoa_hybrid
+  cfg:
+    alpha: 0.5
+    k: 5
+    inf_method: ConfidenceAtCommit
+    block_only: true
+    block_agg: avg
+- name: methods.d_cocoa_hybrid
+  cfg:
+    alpha: 0.5
+    k: 10
+    inf_method: ConfidenceAtCommit
+    block_only: true
+    block_agg: avg
