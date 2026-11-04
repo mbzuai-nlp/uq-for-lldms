@@ -6,7 +6,7 @@
 <title>Uncertainty Quantification for Large Language Diffusion Models</title>
 <meta name="description" content="D-CoCoA: zero-shot uncertainty quantification for diffusion LLMs from the denoising trajectory — near sampling-based quality at up to 100x lower overhead.">
 <meta property="og:title" content="Uncertainty Quantification for Large Language Diffusion Models">
-<meta property="og:description" content="Lightweight, zero-shot hallucination detection for diffusion LLMs (LLaDA, Dream), computed live from the denoising trajectory.">
+<meta property="og:description" content="Lightweight, zero-shot hallucination detection for diffusion LLMs (LLaDA, Dream, ReFusion, DiffusionGemma), computed live from the denoising trajectory.">
 <meta property="og:image" content="static/img/gsm8k_1046_poster.jpg">
 <meta name="twitter:card" content="summary_large_image">
 <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -175,7 +175,7 @@ td.ov1{border-left:1px solid var(--line)}
 td.ov small{display:inline;font-size:11.5px;margin-left:6px}
 td.ov .slow{color:var(--bad);font-weight:600}
 td.ov .ref{color:var(--accent);font-weight:700}
-td.ov .dim{color:var(--fg3)}
+td.ov .dim{color:var(--fg3)} td.na{color:var(--fg3)}
 .speed{display:flex;gap:18px;align-items:center;border:1px solid var(--line);border-left:4px solid var(--accent);border-radius:14px;background:var(--card);padding:14px 18px;margin:0 0 14px;font-size:15px;line-height:1.5}
 .speed .big{font-size:40px;font-weight:800;color:var(--accent);letter-spacing:-.02em;white-space:nowrap}
 @media(max-width:600px){.speed{flex-direction:column;align-items:flex-start;gap:4px}}
@@ -246,7 +246,7 @@ footer .wrap{display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap}
     <div class="stats">
       <div class="stat"><div class="n">~100<span>×</span></div><div class="l">less extra compute than CoCoA-MCNLL &amp; KLE</div></div>
       <div class="stat"><div class="n">8</div><div class="l">datasets across QA, summarization &amp; MT</div></div>
-      <div class="stat"><div class="n">2</div><div class="l">diffusion LLMs: LLaDA-1.5 &amp; Dream</div></div>
+      <div class="stat"><div class="n">4</div><div class="l">diffusion LLMs: LLaDA-1.5, Dream, ReFusion &amp; DiffusionGemma</div></div>
       <div class="stat"><div class="n">0</div><div class="l">extra generations or training needed</div></div>
     </div>
   </div>
@@ -258,14 +258,14 @@ footer .wrap{display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap}
   <div class="eyebrow">Abstract</div>
   <h2>Fast inference and reliable hallucination detection — at the same time</h2>
   <p class="muted">Large Language Diffusion Models (LLDMs) are emerging as an alternative to autoregressive models, offering faster inference through higher parallelism. Similar to autoregressive LLMs, they remain prone to hallucinations, making reliable uncertainty quantification (UQ) crucial for safe deployment. However, existing UQ methods are fundamentally misaligned with this new paradigm: they assume autoregressive factorization or use expensive repeated sampling, negating the efficiency of LLDMs.</p>
-  <p class="muted">In this work, we present the first systematic study of UQ for LLDMs and propose lightweight, zero-shot uncertainty signals derived from the iterative denoising process, leveraging intermediate generations, token remasking dynamics, and denoising complexity. We further adapt a state-of-the-art UQ method to LLDMs by combining masked diffusion likelihoods with trajectory-based semantic dissimilarity. We prove that expected trajectory dissimilarity lower bounds the masked diffusion training objective, which motivates its usage as an uncertainty score. Comprehensive experiments across three tasks, eight datasets, and two models show that our method achieves a great cost-performance trade-off: it approaches the strongest sampling-based baselines while incurring up to 100x lower computational overhead. Our work demonstrates that LLDMs can deliver both fast inference and reliable hallucination detection simultaneously.</p>
+  <p class="muted">In this work, we present the first systematic study of UQ for LLDMs and propose lightweight, zero-shot uncertainty signals derived from the iterative denoising process, leveraging intermediate generations, token remasking dynamics, and denoising complexity. We further adapt a state-of-the-art UQ method to LLDMs by combining masked diffusion likelihoods with trajectory-based semantic dissimilarity. We prove that expected trajectory dissimilarity lower bounds the masked diffusion training objective, which motivates its usage as an uncertainty score. Comprehensive experiments across three tasks, eight datasets, and four models show that our method achieves a great cost-performance trade-off: it approaches the strongest sampling-based baselines while incurring up to 100x lower computational overhead. Our work demonstrates that LLDMs can deliver both fast inference and reliable hallucination detection simultaneously.</p>
 </div></section>
 
 <section id="problem">
   <div class="eyebrow">Motivation</div>
   <h2>Why standard UQ breaks for diffusion LLMs</h2>
   <div class="cards3">
-    <div class="card"><div class="ic bad"><svg viewBox="0 0 24 24"><path d="M4 12h16M14 6l6 6-6 6"/><path d="M4 4l16 16"/></svg></div><h4>No left-to-right likelihood</h4><p>LLDMs don't factorize \(p(y_l\mid y_{&lt;l},x)\), and their token probabilities come from a lower-bound objective. Information-based scores such as MSP or perplexity perform only marginally better than random.</p></div>
+    <div class="card"><div class="ic bad"><svg viewBox="0 0 24 24"><path d="M4 12h16M14 6l6 6-6 6"/><path d="M4 4l16 16"/></svg></div><h4>No left-to-right likelihood</h4><p>LLDMs don't factorize \(p(y_l\mid y_{&lt;l},x)\), and their token probabilities come from a lower-bound objective. Information-based scores such as MSP or perplexity typically perform only marginally better than random.</p></div>
     <div class="card"><div class="ic bad"><svg viewBox="0 0 24 24"><rect x="3" y="4" width="7" height="7" rx="1.5"/><rect x="14" y="4" width="7" height="7" rx="1.5"/><rect x="3" y="14" width="7" height="7" rx="1.5"/><rect x="14" y="14" width="7" height="7" rx="1.5"/></svg></div><h4>Sampling kills the speed-up</h4><p>Consistency methods (Semantic Entropy, KLE, CoCoA) need many full generations — a multiplicative cost that erases the main reason to use a diffusion LLM.</p></div>
     <div class="card"><div class="ic good"><svg viewBox="0 0 24 24"><path d="M3 17c3-6 6-9 9-9s6 3 9 9"/><circle cx="12" cy="8" r="1.5"/></svg></div><h4>The trajectory is free</h4><p>Denoising already produces intermediate states \(z_T,\dots,z_1\). Their dissimilarity to the final output is a strong uncertainty signal at almost no additional cost.</p></div>
   </div>
@@ -297,7 +297,7 @@ footer .wrap{display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap}
 
   <div class="thm">
     <p style="margin:0 0 6px"><b>Theorem 1</b> · Expected Trajectory Dissimilarity as a Lower Bound on the Masking Loss</p>
-    <p style="margin:0">Assume the model is perfectly calibrated (Fisher consistency), \(p_\theta(y\mid x,z_t)=p_{\text{data}}(y\mid x,z_t)\), and \(D(\tilde{y}_t,y)=\mathbb{1}[\tilde{y}_t\not\equiv y]\), then
+    <p style="margin:0">Assume the model is perfectly calibrated (Fisher consistency), \(p_\theta(y\mid z_t,x)=p_{\text{data}}(y\mid z_t,x)\), and \(D(\tilde{y}_t,y)=\mathbb{1}[\tilde{y}_t\not\equiv y]\), then
     $$\mathbb{E}_{(x,y)\sim p_{\text{data}}}\big[u_{\mathrm{AD}}(x,y)\big]\;\le\;\mathcal{L}(\theta).$$
     Consequently, a high value of \(u_{\mathrm{AD}}\) indicates a high expected prediction error and suggests that the generation is likely to contain hallucinations.</p>
   </div>
@@ -307,19 +307,19 @@ footer .wrap{display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap}
   <div class="eyebrow">Results</div>
   <h2>Near sampling-based quality at a fraction of the cost</h2>
   <p class="lead">Selective generation quality is measured with the Prediction Rejection Ratio (PRR ↑, rejection up to 50%). Overhead is extra runtime beyond generation, including auxiliary models.</p>
-  <div class="fig"><img src="static/img/tradeoff.png" alt="Average PRR versus average runtime overhead for LLaDA-1.5 (left) and Dream (right)"></div>
-  <p class="cap">Figure 2 of the paper: UQ performance (PRR↑) versus computational overhead (runtime in seconds↓) averaged across all datasets — (a) LLaDA-1.5, (b) Dream.</p>
+  <div class="fig"><img src="static/img/tradeoff.png" alt="Average PRR versus average runtime overhead for LLaDA-1.5, Dream, ReFusion and DiffusionGemma"></div>
+  <p class="cap">Figure 2 of the paper: UQ performance (PRR↑) versus computational overhead (runtime in seconds↓) averaged across all datasets — (a) LLaDA-1.5, (b) Dream, (c) ReFusion, (d) DiffusionGemma. For DiffusionGemma, D-CoCoA-G uses CommitNLL instead of MCNLL.</p>
 
   <div class="res-head"><h3>PRR ↑ per dataset</h3>
-    <div class="seg" id="c-model"><button class="on" data-k="llada">LLaDA-1.5</button><button data-k="dream">Dream</button></div></div>
+    <div class="seg" id="c-model"><button class="on" data-k="llada">LLaDA-1.5</button><button data-k="dream">Dream</button><button data-k="refusion">ReFusion</button><button data-k="diffusiongemma">DiffusionGemma</button></div></div>
   <div class="speed" id="speed"></div>
   <div class="tablewrap"><table id="res"></table></div>
-  <p class="cap">Best method from each category (Tables 6 and 12 in the paper). Purple = best in column. Overhead = average runtime overhead per instance, read off Fig. 2 (approximate); TAD is a trained probe and is not timed there.</p>
+  <p class="cap">Best method from each category (Tables 6, 11, 16 and 20 in the paper). Purple = best in column. Overhead = average runtime overhead per instance across the eight datasets (as in Fig. 2), relative to D-CoCoA-L. DiffusionGemma has no mask token, so MCNLL-based methods are not applicable and D-CoCoA-G uses CommitNLL instead; TAD produces no score on its single-token MMLU answers.</p>
 
   <div class="cards3">
     <div class="card"><div class="ic bad"><svg viewBox="0 0 24 24"><path d="M12 9v4M12 17h.01"/><path d="M10.3 3.9 2 18a2 2 0 0 0 1.7 3h16.6A2 2 0 0 0 22 18L13.7 3.9a2 2 0 0 0-3.4 0z"/></svg></div><h4>AR-era logit scores fail</h4><p>MSP, perplexity and similar scores are near random for LLDMs; use a diffusion-aware likelihood such as MCNLL instead.</p></div>
     <div class="card"><div class="ic"><svg viewBox="0 0 24 24"><path d="M4 19V5M4 19h16"/><path d="M8 15l3-4 3 2 5-6"/></svg></div><h4>Intermediate states replace sampling</h4><p>Comparing each denoising state with the final output beats pairwise similarity among states.</p></div>
-    <div class="card"><div class="ic good"><svg viewBox="0 0 24 24"><path d="M13 2 4 14h7l-1 8 9-12h-7z"/></svg></div><h4>Fast and reliable</h4><p>D-CoCoA-L requires roughly one hundred times less additional computation time than the best-performing methods, CoCoA-MCNLL and KLE, which provide only modest additional gains (e.g. 2.4% for LLaDA).</p></div>
+    <div class="card"><div class="ic good"><svg viewBox="0 0 24 24"><path d="M13 2 4 14h7l-1 8 9-12h-7z"/></svg></div><h4>Fast and reliable</h4><p>D-CoCoA-L requires roughly one hundred times less additional computation time than the strongest sampling-based methods, such as CoCoA-MCNLL and KLE, which typically provide only modest additional gains (e.g. 2.3% for LLaDA).</p></div>
   </div>
 </section>
 
@@ -349,6 +349,9 @@ const data={
   ["CoCoA-MTE",0.09,0.18,0.51,0.53,0.17,0.26,0.43,0.20,0.30,"sampling"],
   ["KLE",0.22,0.24,0.44,0.48,0.27,0.60,0.43,0.17,0.36,"sampling"],
   ["TAD",0.20,0.38,0.54,0.51,0.14,0.51,0.34,0.35,0.37,"supervised"],
+  ["Supervised diffusion baselines"],
+  ["TraceDet",0.17,-0.05,0.36,0.34,0.22,0.42,0.47,0.33,0.28,"supervised"],
+  ["DynHD",0.06,0.05,0.47,0.45,0.24,0.30,0.43,0.29,0.29,"supervised"],
   ["Diffusion-specific signals"],
   ["MCNLL",0.17,0.18,0.29,0.32,0.24,0.31,0.35,0.23,0.26],
   ["NFE",0.15,0.17,0.31,0.31,0.22,0.18,0.02,0.29,0.21],
@@ -368,6 +371,9 @@ const data={
   ["CoCoA-MTE",0.25,0.28,0.72,0.76,0.24,0.58,0.74,0.41,0.50,"sampling"],
   ["KLE",0.34,0.29,0.47,0.55,0.32,0.67,0.52,0.60,0.47,"sampling"],
   ["TAD",0.44,0.42,0.57,0.48,0.23,0.51,0.02,0.39,0.38,"supervised"],
+  ["Supervised diffusion baselines"],
+  ["TraceDet",0.08,0.14,0.48,0.63,0.29,0.68,0.73,0.29,0.42,"supervised"],
+  ["DynHD",0.05,0.14,0.56,0.62,0.23,0.51,0.79,0.22,0.39,"supervised"],
   ["Diffusion-specific signals"],
   ["MCNLL",0.09,0.03,0.00,0.06,0.25,0.48,0.75,0.28,0.24],
   ["NFE",0.00,-0.02,0.38,0.49,0.35,0.50,0.03,0.35,0.26],
@@ -379,17 +385,61 @@ const data={
   ["Ours — no sampling"],
   ["D-CoCoA-G",0.14,0.22,0.64,0.68,0.34,0.62,0.75,0.33,0.47,"ours"],
   ["D-CoCoA-L",0.20,0.08,0.55,0.64,0.37,0.65,0.78,0.43,0.46,"ours"]
+ ],
+ refusion:[
+  ["Classical baselines"],
+  ["MSP",0.04,-0.04,0.01,0.06,0.09,0.27,-0.09,0.10,0.06],
+  ["SAR",0.16,0.07,-0.08,-0.12,-0.16,-0.06,0.05,-0.21,-0.04,"sampling"],
+  ["CoCoA-MTE",0.17,0.29,0.40,0.47,0.29,0.55,0.48,0.53,0.40,"sampling"],
+  ["KLE",0.36,0.21,0.21,0.31,0.40,0.59,0.55,0.49,0.39,"sampling"],
+  ["TAD",0.44,0.47,0.36,0.46,0.17,0.72,0.43,0.41,0.43,"supervised"],
+  ["Supervised diffusion baselines"],
+  ["TraceDet",0.09,0.08,0.25,0.32,0.33,0.64,0.58,0.18,0.31,"supervised"],
+  ["DynHD",0.13,0.07,0.23,0.39,0.14,0.59,0.39,0.19,0.27,"supervised"],
+  ["Diffusion-specific signals"],
+  ["MCNLL",0.14,0.03,0.21,0.26,0.04,0.45,-0.06,0.25,0.16],
+  ["NFE",0.12,0.02,0.17,0.28,0.30,0.50,-0.01,0.28,0.21],
+  ["AD-Full",0.05,0.05,0.20,0.23,0.25,0.31,0.11,-0.02,0.15],
+  ["CommitNLL",0.03,0.27,0.30,0.33,0.28,0.45,0.51,0.25,0.30],
+  ["Sampling + diffusion likelihood"],
+  ["CoCoA-MCNLL",0.22,0.11,0.34,0.42,0.27,0.57,0.54,0.44,0.36,"sampling"],
+  ["CoCoA-MCNLL-Norm",0.23,0.21,0.37,0.46,0.11,0.54,0.54,0.47,0.37,"sampling"],
+  ["Ours — no sampling"],
+  ["D-CoCoA-G",0.20,0.07,0.30,0.38,0.21,0.52,0.11,0.27,0.26,"ours"],
+  ["D-CoCoA-L",0.04,0.20,0.31,0.36,0.32,0.51,0.50,0.22,0.31,"ours"]
+ ],
+ diffusiongemma:[
+  ["Classical baselines"],
+  ["MSP",0.04,0.03,0.17,0.25,0.16,0.40,0.55,-0.01,0.20],
+  ["SAR",0.10,0.25,0.27,0.37,0.21,0.60,0.34,0.11,0.28,"sampling"],
+  ["CoCoA-MTE",0.08,0.13,0.21,0.33,0.15,0.58,0.55,-0.06,0.25,"sampling"],
+  ["KLE",0.17,0.24,0.32,0.43,0.21,0.61,0.21,0.18,0.30,"sampling"],
+  ["TAD",0.15,0.31,0.49,0.41,0.36,0.66,null,0.60,0.43,"supervised"],
+  ["Supervised diffusion baselines"],
+  ["TraceDet",0.04,-0.12,0.10,0.20,0.17,0.54,0.61,0.56,0.26,"supervised"],
+  ["DynHD",0.04,-0.19,0.26,0.37,0.34,0.65,0.49,0.56,0.31,"supervised"],
+  ["Diffusion-specific signals"],
+  ["NFE",0.04,0.21,0.22,0.32,0.23,0.28,0.14,0.39,0.23],
+  ["AD-Full",0.02,0.16,0.21,0.27,0.20,0.41,0.08,-0.09,0.16],
+  ["CommitNLL",0.04,0.15,0.30,0.33,0.29,0.44,0.60,0.25,0.30],
+  ["Ours — no sampling"],
+  ["D-CoCoA-G",0.08,0.27,0.31,0.35,0.32,0.54,0.61,0.27,0.34,"ours"],
+  ["D-CoCoA-L",0.04,0.21,0.29,0.31,0.31,0.54,0.61,0.03,0.29,"ours"]
  ]};
 
-const ovh={"llada": {"MSP": [0, null], "SAR": [33.3, 179], "CoCoA-MTE": [19.6, 105], "KLE": [20.6, 111], "TAD": [null, null], "MCNLL": [0.53, 2.8], "NFE": [0, null], "AD-Full": [0.34, 1.8], "CommitNLL": [0, null], "CoCoA-MCNLL": [20.1, 108], "CoCoA-MCNLL-Norm": [20.1, 108], "D-CoCoA-G": [0.91, 4.8], "D-CoCoA-L": [0.19, 1]}, "dream": {"MSP": [0, null], "SAR": [19.9, 138], "CoCoA-MTE": [14.0, 97], "KLE": [17.7, 123], "TAD": [null, null], "MCNLL": [0.97, 6.9], "NFE": [0, null], "AD-Full": [0.15, 1.1], "CommitNLL": [0, null], "CoCoA-MCNLL": [14.9, 104], "CoCoA-MCNLL-Norm": [14.9, 104], "D-CoCoA-G": [1.07, 7.6], "D-CoCoA-L": [0.14, 1]}};
+const ovh={"llada": {"MSP": [0, null], "SAR": [33.3, 179], "CoCoA-MTE": [19.6, 106], "KLE": [20.6, 111], "TAD": [0.53, 2.8], "TraceDet": [0.008, null], "DynHD": [0, null], "MCNLL": [0.53, 2.8], "NFE": [0, null], "AD-Full": [0.34, 1.8], "CommitNLL": [0, null], "CoCoA-MCNLL": [20.1, 108], "CoCoA-MCNLL-Norm": [20.1, 108], "D-CoCoA-G": [0.91, 4.9], "D-CoCoA-L": [0.19, 1.0]}, "dream": {"MSP": [0, null], "SAR": [19.9, 139], "CoCoA-MTE": [14.0, 97], "KLE": [17.7, 123], "TAD": [0.3, 2.1], "TraceDet": [0.006, null], "DynHD": [0, null], "MCNLL": [0.97, 6.7], "NFE": [0, null], "AD-Full": [0.15, 1.0], "CommitNLL": [0, null], "CoCoA-MCNLL": [14.9, 104], "CoCoA-MCNLL-Norm": [14.9, 104], "D-CoCoA-G": [1.07, 7.5], "D-CoCoA-L": [0.14, 1.0]}, "refusion": {"MSP": [0, null], "SAR": [11.9, 309], "CoCoA-MTE": [9.56, 249], "KLE": [9.69, 253], "TAD": [0.2, 5.1], "TraceDet": [0.007, null], "DynHD": [0.019, 0.5], "MCNLL": [0.42, 11], "NFE": [0, null], "AD-Full": [0.038, 1.0], "CommitNLL": [0, null], "CoCoA-MCNLL": [9.98, 260], "CoCoA-MCNLL-Norm": [9.98, 260], "D-CoCoA-G": [0.46, 12], "D-CoCoA-L": [0.038, 1.0]}, "diffusiongemma": {"MSP": [0, null], "SAR": [15.3, 469], "CoCoA-MTE": [12.0, 369], "KLE": [12.1, 373], "TAD": [0.12, 3.8], "TraceDet": [0, null], "DynHD": [0, null], "NFE": [0, null], "AD-Full": [0.033, 1.0], "CommitNLL": [0, null], "D-CoCoA-G": [0.033, 1.0], "D-CoCoA-L": [0.033, 1.0]}};
 function ovcell(m,k){const [o,x]=ovh[m][k]||[null,null];
   const os=o===null?"—":o===0?"≈0 s":(o<1?o.toFixed(2):o.toFixed(1))+" s";
-  const xs=x===null?``:x===1?`<small class="ref">reference</small>`:x>=50?`<small class="slow">${x}× slower</small>`:`<small class="dim">${x}×</small>`;
+  const xs=k==="D-CoCoA-L"?`<small class="ref">reference</small>`:x===null?``:x>=50?`<small class="slow">${x}× slower</small>`:`<small class="dim">${x<10?x.toFixed(1):x}×</small>`;
   return `<td class="ov ov1">${os}${xs}</td>`}
-const hl={llada:{p:"0.35",b:"0.38",o:"0.19 s",c:"20.1 s",x:"108",v:"at comparable PRR"},dream:{p:"0.46",b:"0.43",o:"0.14 s",c:"14.9 s",x:"104",v:"with a higher mean PRR"}};
+const hl={llada:{u:"D-CoCoA-L",r:"CoCoA-MCNLL",v:"at comparable PRR"},dream:{u:"D-CoCoA-L",r:"CoCoA-MCNLL",v:"with a higher mean PRR"},refusion:{u:"D-CoCoA-L",r:"CoCoA-MCNLL",v:"at slightly lower PRR"},diffusiongemma:{u:"D-CoCoA-G",r:"KLE",v:"with a higher mean PRR"}};
+const refNote={"CoCoA-MCNLL":"<i>N</i><sub>mc</sub> = 16 masking passes + sampled generations + a cross-encoder","KLE":"sampled generations + an NLI model"};
+const fs=o=>o<1?o.toFixed(2)+" s":o.toFixed(1)+" s";
 function render(m){
-  const H=hl[m];document.getElementById("speed").innerHTML=`<div class="big">~${H.x}×</div><div><b>less overhead than CoCoA-MCNLL ${H.v}.</b> D-CoCoA-L: mean PRR ${H.p} for ${H.o} of extra compute per answer; CoCoA-MCNLL: ${H.b} for ${H.c} (<i>N</i><sub>mc</sub> = 16 masking passes + sampled generations + a cross-encoder). SAR, KLE and CoCoA-MTE are ~100–180× slower. Overheads read off Fig. 2.</div>`;
-  const rows=data[m], best=cols.map((_,j)=>Math.max(...rows.filter(r=>r.length>1).map(r=>r[j+1])));
+  const H=hl[m],O=ovh[m],mean=k=>data[m].find(r=>r[0]===k)[9].toFixed(2),x=Math.round(O[H.r][1]/(H.u==="D-CoCoA-L"?1:O[H.u][1]));
+  const oth=["SAR","KLE","CoCoA-MTE"].filter(k=>k!==H.r),xs=oth.map(k=>O[k][1]),lo=Math.floor(Math.min(...xs)/10)*10,hi=Math.ceil(Math.max(...xs)/10)*10;
+  document.getElementById("speed").innerHTML=`<div class="big">~${x}×</div><div><b>less overhead than ${H.r} ${H.v}.</b> ${H.u}: mean PRR ${mean(H.u)} for ${fs(O[H.u][0])} of extra compute per answer; ${H.r}: ${mean(H.r)} for ${fs(O[H.r][0])} (${refNote[H.r]}). ${oth.length>2?oth.slice(0,-1).join(", ")+" and "+oth.at(-1):oth.join(" and ")} are ~${lo}–${hi}× slower than D-CoCoA-L.</div>`;
+  const rows=data[m], best=cols.map((_,j)=>Math.max(...rows.filter(r=>r.length>1&&r[j+1]!==null).map(r=>r[j+1])));
   const mx=Math.max(...rows.filter(r=>r.length>1).map(r=>r[9]));
   let h="<thead><tr><th>Method</th>"+cols.map(c=>`<th>${c}</th>`).join("")+"<th class=\"ov\">Overhead</th></tr></thead><tbody>";
   for(const r of rows){
@@ -397,6 +447,7 @@ function render(m){
     const tag=r[10], ours=tag==="ours";
     h+=`<tr class="${ours?"ours":""}"><td>${r[0]}${tag&&!ours?`<span class="chip">${tag}</span>`:""}</td>`+
       cols.map((c,j)=>{const v=r[j+1],last=j===cols.length-1;
+        if(v===null)return `<td class="na">—</td>`;
         return `<td class="${last?"mean ":""}${v===best[j]?"best":""}">${last?`<span class="bar" style="width:${Math.max(0,v/mx*56)}px"></span>`:""}${v.toFixed(2)}</td>`}).join("")+ovcell(m,r[0])+"</tr>";
   }
   document.getElementById("res").innerHTML=h+"</tbody>";
